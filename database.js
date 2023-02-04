@@ -20,7 +20,7 @@ const addShip = newShip => new Promise((resolve, reject) => {
         resolve(newShip);
       });
     })
-    .catch(error => reject(error));S
+    .catch(error => reject(error));
 });
 
 
