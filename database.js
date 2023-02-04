@@ -12,7 +12,6 @@ const database = new Realm({
   schema: [ShipSchema]
 })
 
-console.log(database.path)
 
 const addShip = newShip => new Promise((resolve, reject) => {
   Realm.open(database)
@@ -41,7 +40,7 @@ const deleteAllShips = () => {
 deleteAllShips()
 
 // Add some ships to the database
-// addShip({ name: 'Cutlass Black', manufacturer: 'Drake Interplanetary' });
-// addShip({ name: 'Avenger Titan', manufacturer: 'Aegis Dynamics' });
-// addShip({ name: 'Gladius', manufacturer: 'Aegis Dynamics' });
-// addShip({ name: '300i', manufacturer: 'Origin Jumpworks' });
+addShip({ name: 'Cutlass Black', manufacturer: 'Drake Interplanetary' });
+addShip({ name: 'Avenger Titan', manufacturer: 'Aegis Dynamics' });
+addShip({ name: 'Gladius', manufacturer: 'Aegis Dynamics' });
+addShip({ name: '300i', manufacturer: 'Origin Jumpworks' });
