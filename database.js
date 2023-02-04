@@ -40,7 +40,7 @@ const deleteAllShips = () => {
 deleteAllShips()
 
 // Add some ships to the database
-addShip({ name: 'Cutlass Black', manufacturer: 'Drake Interplanetary' });
-addShip({ name: 'Avenger Titan', manufacturer: 'Aegis Dynamics' });
-addShip({ name: 'Gladius', manufacturer: 'Aegis Dynamics' });
-addShip({ name: '300i', manufacturer: 'Origin Jumpworks' });
+// addShip({ name: 'Cutlass Black', manufacturer: 'Drake Interplanetary' });
+// addShip({ name: 'Avenger Titan', manufacturer: 'Aegis Dynamics' });
+// addShip({ name: 'Gladius', manufacturer: 'Aegis Dynamics' });
+// addShip({ name: '300i', manufacturer: 'Origin Jumpworks' });

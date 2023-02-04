@@ -59,11 +59,12 @@ function ShipScreen ({ navigation }) {
     <View style={styles.container}>
       <ScrollView>
         {ships.map((item) => {
-          const manufacturer = item.manufacturer.split(" ").join("_").toLowerCase();
+          const manufacturerKey = item.manufacturer.toLowerCase().split(" ").join("_");
+          const nameKey = item.name.toLowerCase().split(" ").join("_");
           return (
             <View style={styles.shipContainer} key={item.name}>
               <Image
-                source={require(`./assets/icons/${manufacturer}/${item.name.toLowerCase()}.png`)}
+                source={require(`./assets/icons/${manufacturerKey}/${nameKey}.png`)}
                 style={styles.icon}
               />
               <View style={styles.textContainer}>
@@ -77,6 +78,7 @@ function ShipScreen ({ navigation }) {
     </View>
   );
 };
+
 
 
 
