@@ -59,25 +59,32 @@ function ShipScreen ({ navigation }) {
     <View style={styles.container}>
       <ScrollView>
         {ships.map((item) => {
-          const manufacturerKey = item.manufacturer.toLowerCase().split(" ").join("_");
-          const nameKey = item.name.toLowerCase().split(" ").join("_");
-          return (
-            <View style={styles.shipContainer} key={item.name}>
-              <Image
-                source={require(`./assets/icons/${manufacturerKey}/${nameKey}.png`)}
-                style={styles.icon}
-              />
-              <View style={styles.textContainer}>
-                <Text style={styles.name}>{item.name}</Text>
-                <Text style={styles.manufacturer}>{item.manufacturer}</Text>
+          const manufacturerKey = item.manufacturer.toLowerCase().split(' ').join('_');
+          const nameKey = item.name.toLowerCase().split(' ').join('_');
+          try {
+            const icon = require(`./assets/icons/${manufacturerKey}/${nameKey}.png`);
+            return (
+              <View style={styles.shipContainer} key={item.name}>
+                <Image
+                  source={icon}
+                  style={styles.icon}
+                />
+                <View style={styles.textContainer}>
+                  <Text style={styles.name}>{item.name}</Text>
+                  <Text style={styles.manufacturer}>{item.manufacturer}</Text>
+                </View>
               </View>
-            </View>
-          );
+            );
+          } catch (e) {
+            console.warn(`Could not find image for ship ${item.name} from ${item.manufacturer}`);
+            return null;
+          }
         })}
       </ScrollView>
     </View>
   );
 };
+
 
 
 
