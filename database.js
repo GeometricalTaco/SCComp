@@ -12,6 +12,8 @@ const database = new Realm({
   schema: [ShipSchema]
 })
 
+console.log(database.path)
+
 const addShip = newShip => new Promise((resolve, reject) => {
   Realm.open(database)
     .then(realm => {
