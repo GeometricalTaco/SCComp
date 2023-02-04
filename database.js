@@ -37,7 +37,7 @@ const deleteAllShips = () => {
   });
 };
 
-deleteAllShips()
+//deleteAllShips()
 
 // Add some ships to the database
 // addShip({ name: 'Cutlass Black', manufacturer: 'Drake Interplanetary' });

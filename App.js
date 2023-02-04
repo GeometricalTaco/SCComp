@@ -62,11 +62,10 @@ function ShipScreen ({ navigation }) {
           const manufacturerKey = item.manufacturer.toLowerCase().split(' ').join('_');
           const nameKey = item.name.toLowerCase().split(' ').join('_');
           try {
-            const icon = require(`./assets/icons/${manufacturerKey}/${nameKey}.png`);
             return (
               <View style={styles.shipContainer} key={item.name}>
                 <Image
-                  source={icon}
+                  source={{ uri: `./assets/icons/${manufacturerKey}/${nameKey}.png` }}
                   style={styles.icon}
                 />
                 <View style={styles.textContainer}>
