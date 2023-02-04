@@ -13,19 +13,20 @@ const database = new Realm({
 })
 
 const addShip = newShip => new Promise((resolve, reject) => {
-  Realm.open(databaseOptions)
+  Realm.open(database)
     .then(realm => {
       realm.write(() => {
         realm.create('Ship', newShip);
         resolve(newShip);
       });
     })
-    .catch(error => reject(error));
+    .catch(error => reject(error));S
 });
 
 
 export const getShips = () => {
-  return database.objects("Ship").sorted("manufacturer, name");
+  const ships = database.objects("Ship");
+  return ships.sorted("manufacturer").sorted("name");
 };
 
 // Add some ships to the database
