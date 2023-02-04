@@ -31,8 +31,17 @@ export const getShips = () => {
   return ships.sorted("manufacturer").sorted("name");
 };
 
+const deleteAllShips = () => {
+  return database.write(() => {
+    const allShips = database.objects("Ship");
+    database.delete(allShips);
+  });
+};
+
+deleteAllShips()
+
 // Add some ships to the database
-addShip({ name: 'Cutlass Black', manufacturer: 'Drake Interplanetary' });
-addShip({ name: 'Avenger Titan', manufacturer: 'Aegis Dynamics' });
-addShip({ name: 'Gladius', manufacturer: 'Aegis Dynamics' });
-addShip({ name: '300i', manufacturer: 'Origin Jumpworks' });
+// addShip({ name: 'Cutlass Black', manufacturer: 'Drake Interplanetary' });
+// addShip({ name: 'Avenger Titan', manufacturer: 'Aegis Dynamics' });
+// addShip({ name: 'Gladius', manufacturer: 'Aegis Dynamics' });
+// addShip({ name: '300i', manufacturer: 'Origin Jumpworks' });
