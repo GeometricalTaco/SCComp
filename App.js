@@ -341,15 +341,41 @@ function CreateLoadoutScreen({ navigation, route }) {
   const [selectedQuantumDrive, setSelectedQuantumDrive] = useState(null);
   
   useEffect(() => {
-     // Fetch all available components from the database
-     fetchComponents().then(components => {
-      setWeapons(components.filter(component => component.type === 'weapon'));
-      setMissiles(components.filter(component => component.type === 'missile'));
-      setShields(components.filter(component => component.type === 'shield'));
-      setPowerPlants(components.filter(component => component.type === 'powerPlant'));
-      setCoolers(components.filter(component => component.type === 'cooler'));
-      setQuantumDrives(components.filter(component => component.type === 'quantumDrive'));
-    });
+    const ships = getShips();
+
+    if (ships.length > 0) {
+      const weapons = [];
+      const missiles = [];
+      const shields = [];
+      const powerPlants = [];
+      const coolers = [];
+      const quantumDrives = [];
+
+      ships.forEach(ship => {
+        ship.weapons.forEach(weapon => {
+          weapons.push(weapon);
+        });
+        ship.shields.forEach(shield => {
+          shields.push(shield);
+        });
+        ship.powerPlants.forEach(powerPlant => {
+          powerPlants.push(powerPlant);
+        });
+        ship.coolers.forEach(cooler => {
+          coolers.push(cooler);
+        });
+        ship.quantumDrives.forEach(quantumDrive => {
+          quantumDrives.push(quantumDrive);
+        });
+      });
+
+      setWeapons(weapons);
+      setMissiles(missiles);
+      setShields(shields);
+      setPowerPlants(powerPlants);
+      setCoolers(coolers);
+      setQuantumDrives(quantumDrives);
+    }
   }, []);
   
   // Function to fetch all available components from the database
@@ -393,7 +419,6 @@ function CreateLoadoutScreen({ navigation, route }) {
 
   // Function to handle the saving of the loadout
   const handleSaveLoadout = () => {
-    const { selectedShip, weapons, shields, powerPlants, coolers, quantumDrives } = state;
     database.write(() => {
       const ship = database.create('Ship', {
         name: selectedShip.name,
@@ -424,7 +449,8 @@ function CreateLoadoutScreen({ navigation, route }) {
           count: quantumDrive.count
         }))
       });
-      console.log(`Saved loadout for ${ship.name}`);
+      setLoadouts([...loadouts, ship]);
+      setSelectedLoadout(ship);
     });
   };
   

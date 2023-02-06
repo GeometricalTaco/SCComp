@@ -73,6 +73,36 @@ const QuantumDriveSchema = {
   }
 };
 
+const createComponents = (realm) => {
+  realm.write(() => {
+    const weapons = realm.create('Weapon', [
+      { size: 1, default: 'Laser Cannon', count: 0 },
+      { size: 2, default: 'Plasma Cannon', count: 0 },
+      { size: 3, default: 'Particle Cannon', count: 0 }
+    ]);
+    const shields = realm.create('Shield', [
+      { size: 1, default: 'Light Shield', count: 0 },
+      { size: 2, default: 'Medium Shield', count: 0 },
+      { size: 3, default: 'Heavy Shield', count: 0 }
+    ]);
+    const powerPlants = realm.create('PowerPlant', [
+      { size: 1, default: 'Nuclear Reactor', count: 0 },
+      { size: 2, default: 'Antimatter Reactor', count: 0 },
+      { size: 3, default: 'Singularity Reactor', count: 0 }
+    ]);
+    const coolers = realm.create('Cooler', [
+      { size: 1, default: 'Radiation Cooler', count: 0 },
+      { size: 2, default: 'Heat Dissipator', count: 0 },
+      { size: 3, default: 'Quantum Cooler', count: 0 }
+    ]);
+    const quantumDrives = realm.create('QuantumDrive', [
+      { size: 1, default: 'Warp Drive', count: 0 },
+      { size: 2, default: 'Hyperspace Drive', count: 0 },
+      { size: 3, default: 'Quantum Leap Drive', count: 0 }
+    ]);
+  });
+};
+
 export const database = new Realm({
   schema: [ShipSchema, WeaponSchema, ShieldSchema, PowerPlantSchema, CoolerSchema, QuantumDriveSchema],
   schemaVersion: 1,
@@ -92,6 +122,9 @@ export const database = new Realm({
     }
   }
 });
+
+createComponents(database);
+
 
 
 
