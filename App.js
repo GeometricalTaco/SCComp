@@ -9,7 +9,7 @@ const Stack = createNativeStackNavigator();
 
 import Icons from './assets/icons';
 
-
+//1A1B1E
 
 function HomeScreen({ navigation }) {
   return (
