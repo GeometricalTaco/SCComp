@@ -47,18 +47,33 @@ function HomeScreen({ navigation }) {
 }
 
 
-function ShipScreen ({ navigation }) {
+function ShipScreen({ navigation }) {
   const [ships, setShips] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredShips, setFilteredShips] = useState([]);
 
   useEffect(() => {
     const ships = getShips();
     setShips(ships);
+    setFilteredShips(ships);
   }, []);
+
+  useEffect(() => {
+    setFilteredShips(ships.filter(ship => ship.name.toLowerCase().includes(searchTerm.toLowerCase())));
+  }, [searchTerm, ships]);
 
   return (
     <View style={styles.container}>
+      <View style={styles.inputField}>
+        <TextInput
+          style={styles.input}
+          placeholder="Search for a ship..."
+          value={searchTerm}
+          onChangeText={setSearchTerm}
+        />
+      </View>
       <ScrollView>
-        {ships.map((item) => {
+        {filteredShips.map((item) => {
           const manufacturerKey = item.manufacturer.toLowerCase().split(' ').join('_');
           const nameKey = item.name.toLowerCase().split(' ').join('_');
           try {
@@ -75,6 +90,7 @@ function ShipScreen ({ navigation }) {
               </View>
             );
           } catch (e) {
+            console.log(e);
             console.warn(`Could not find image for ship ${item.name} from ${item.manufacturer}`);
             return null;
           }
@@ -82,7 +98,8 @@ function ShipScreen ({ navigation }) {
       </ScrollView>
     </View>
   );
-};
+}
+
 
 
 
