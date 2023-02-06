@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { getShips } from './database.js';
 const Stack = createNativeStackNavigator();
 
+import Icons from './assets/icons';
 
 
 
@@ -80,7 +81,7 @@ function ShipScreen({ navigation }) {
             return (
               <View style={styles.shipContainer} key={item.name}>
                 <Image
-                  source={{ uri: `./assets/icons/${manufacturerKey}/${nameKey}.png` }}
+                  source={Icons[manufacturerKey]?.[nameKey]}
                   style={styles.icon}
                 />
                 <View style={styles.textContainer}>

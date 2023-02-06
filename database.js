@@ -74,9 +74,31 @@ const QuantumDriveSchema = {
 };
 
 const database = new Realm({
-  schema: [ShipSchema, WeaponSchema, ShieldSchema, PowerPlantSchema, CoolerSchema, QuantumDriveSchema]
+  schema: [ShipSchema, WeaponSchema, ShieldSchema, PowerPlantSchema, CoolerSchema, QuantumDriveSchema],
+  schemaVersion: 1,
+  migration: (oldRealm, newRealm) => {
+    // Copy all objects from the old realm to the new realm
+    const oldObjects = oldRealm.objects('Ship');
+    const newObjects = newRealm.objects('Ship');
+
+    for (let i = 0; i < oldObjects.length; i++) {
+      newObjects[i].name = oldObjects[i].name;
+      newObjects[i].manufacturer = oldObjects[i].manufacturer;
+      newObjects[i].weapons = oldObjects[i].weapons;
+      newObjects[i].shields = oldObjects[i].shields;
+      newObjects[i].powerPlants = oldObjects[i].powerPlants;
+      newObjects[i].coolers = oldObjects[i].coolers;
+      newObjects[i].quantumDrives = oldObjects[i].quantumDrives;
+    }
+  }
 });
 
+
+
+export const getShips = () => {
+  const ships = database.objects("Ship");
+  return ships.sorted("manufacturer").sorted("name");
+}
 
 //deleteAllShips()
 
