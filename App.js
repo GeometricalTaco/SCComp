@@ -1,13 +1,19 @@
-import "react-native-gesture-handler"
+import "react-native-gesture-handler";
+import Realm from 'realm';
 import React, {useState, useEffect} from "react";
 import { Button, Text, TextInput, View, Image, Pressable, ScrollView, FlatList, SectionList, StyleSheet, SafeAreaView, TouchableOpacity } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { getShips } from './database.js';
+import { Picker } from '@react-native-picker/picker'
+import { getShips, database } from './database';
+
 const Stack = createNativeStackNavigator();
 
 import Icons from './assets/icons';
+
+const ships = getShips();
+console.log(ships)
 
 //1A1B1E
 
@@ -319,14 +325,199 @@ function ViewLoadoutsScreen({ navigation }) {
 
 
 
-function CreateLoadoutScreen({ navigation }) {
+function CreateLoadoutScreen({ navigation, route }) {
+  const [selectedShip, setSelectedShip] = useState(route.params?.ship || null);
+  const [selectedLoadout, setSelectedLoadout] = useState(null);
+  const [selectedComponents, setSelectedComponents] = useState({});
+  const [loadouts, setLoadouts] = useState([]);
+  const [weapons, setWeapons] = useState([]);
+  const [missiles, setMissiles] = useState([]);
+  const [shields, setShields] = useState([]);
+  const [powerPlants, setPowerPlants] = useState([]);
+  const [coolers, setCoolers] = useState([]);
+  const [quantumDrives, setQuantumDrives] = useState([]);
+  const [selectedPowerPlant, setSelectedPowerPlant] = useState(null);
+  const [selectedCooler, setSelectedCooler] = useState(null);
+  const [selectedQuantumDrive, setSelectedQuantumDrive] = useState(null);
   
+  useEffect(() => {
+     // Fetch all available components from the database
+     fetchComponents().then(components => {
+      setWeapons(components.filter(component => component.type === 'weapon'));
+      setMissiles(components.filter(component => component.type === 'missile'));
+      setShields(components.filter(component => component.type === 'shield'));
+      setPowerPlants(components.filter(component => component.type === 'powerPlant'));
+      setCoolers(components.filter(component => component.type === 'cooler'));
+      setQuantumDrives(components.filter(component => component.type === 'quantumDrive'));
+    });
+  }, []);
+  
+  // Function to fetch all available components from the database
+  const fetchComponents = async () => {
+    try {
+      const ships = database.objects('Ship');
+      let weapons = [];
+      let shields = [];
+      let powerPlants = [];
+      let coolers = [];
+      let quantumDrives = [];
+      ships.forEach(ship => {
+        weapons = [...weapons, ...ship.weapons];
+        shields = [...shields, ...ship.shields];
+        powerPlants = [...powerPlants, ...ship.powerPlants];
+        coolers = [...coolers, ...ship.coolers];
+        quantumDrives = [...quantumDrives, ...ship.quantumDrives];
+      });
+      weapons = [...new Set(weapons.map(item => item.default))];
+      shields = [...new Set(shields.map(item => item.default))];
+      powerPlants = [...new Set(powerPlants.map(item => item.default))];
+      coolers = [...new Set(coolers.map(item => item.default))];
+      quantumDrives = [...new Set(quantumDrives.map(item => item.default))];
+      fetchComponents({ weapons, shields, powerPlants, coolers, quantumDrives });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+
+  // Function to handle changes in the selected components
+  const handleComponentChange = (type, size, value) => {
+    setSelectedComponents({
+      ...selectedComponents,
+      [type]: {
+        ...selectedComponents[type],
+        [size]: value
+      }
+    });
+  };
+
+  // Function to handle the saving of the loadout
+  const handleSaveLoadout = () => {
+    const { selectedShip, weapons, shields, powerPlants, coolers, quantumDrives } = state;
+    database.write(() => {
+      const ship = database.create('Ship', {
+        name: selectedShip.name,
+        manufacturer: selectedShip.manufacturer,
+        weapons: weapons.map(weapon => ({
+          size: weapon.size,
+          default: weapon.default,
+          count: weapon.count
+        })),
+        shields: shields.map(shield => ({
+          size: shield.size,
+          default: shield.default,
+          count: shield.count
+        })),
+        powerPlants: powerPlants.map(powerPlant => ({
+          size: powerPlant.size,
+          default: powerPlant.default,
+          count: powerPlant.count
+        })),
+        coolers: coolers.map(cooler => ({
+          size: cooler.size,
+          default: cooler.default,
+          count: cooler.count
+        })),
+        quantumDrives: quantumDrives.map(quantumDrive => ({
+          size: quantumDrive.size,
+          default: quantumDrive.default,
+          count: quantumDrive.count
+        }))
+      });
+      console.log(`Saved loadout for ${ship.name}`);
+    });
+  };
+  
+
+  // Render the LoadoutScreen component
+
   return (
-    <View style={styles.container}>
-      <Text>uwu</Text>
+    <View>
+      <Text>Selected Ship: {selectedShip ? selectedShip.name : 'No ship selected'}</Text>
+      {selectedShip && Object.entries(selectedShip.weaponSlots).map(([size, count]) => (
+        <View key={size}>
+          <Text>Size {size} Weapons:</Text>
+          <Picker
+            selectedValue={selectedLoadout?.[`weapons${size}`]}
+            onValueChange={value => setSelectedLoadout({ ...selectedLoadout, [`weapons${size}`]: value })}
+          >
+            <Picker.Item label="Select Weapon" value={null} />
+            {weapons
+              .filter(weapon => weapon.size === size)
+              .map(weapon => (
+                <Picker.Item key={weapon.name} label={weapon.name} value={weapon.name} />
+              ))}
+          </Picker>
+        </View>
+      ))}
+      <View>
+        <Text>Missiles:</Text>
+        <Picker
+          selectedValue={selectedLoadout?.missiles}
+          onValueChange={value => setSelectedLoadout({ ...selectedLoadout, missiles: value })}
+        >
+          <Picker.Item label="Select Missile" value={null} />
+          {missiles.map(missile => (
+            <Picker.Item key={missile.name} label={missile.name} value={missile.name} />
+          ))}
+        </Picker>
+      </View>
+      <View>
+        <Text>Shields:</Text>
+        <Picker
+          selectedValue={selectedLoadout?.shields}
+          onValueChange={value => setSelectedLoadout({ ...selectedLoadout, shields: value })}
+        >
+          <Picker.Item label="Select Shield" value={null} />
+          {shields.map(shield => (
+            <Picker.Item key={shield.name} label={shield.name} value={shield.name} />
+          ))}
+        </Picker>
+      </View>
+      <View style={styles.componentSelector}>
+        <Text style={styles.componentText}>Power Plant</Text>
+        <Picker
+          selectedValue={selectedPowerPlant}
+          style={styles.componentPicker}
+          onValueChange={itemValue => setSelectedPowerPlant(itemValue)}
+        >
+          <Picker.Item label="Select Power Plant" value={null} />
+          {powerPlants.map(powerPlant => (
+            <Picker.Item key={powerPlant.name} label={powerPlant.name} value={powerPlant.name} />
+          ))}
+        </Picker>
+      </View>
+      <View style={styles.componentSelector}>
+        <Text style={styles.componentText}>Cooler</Text>
+        <Picker
+          selectedValue={selectedCooler}
+          style={styles.componentPicker}
+          onValueChange={itemValue => setSelectedCooler(itemValue)}
+        >
+          <Picker.Item label="Select Cooler" value={null} />
+          {coolers.map(cooler => (
+            <Picker.Item key={cooler.name} label={cooler.name} value={cooler.name} />
+          ))}
+        </Picker>
+      </View>
+      <View style={styles.componentSelector}>
+        <Text style={styles.componentText}>Quantum Drive</Text>
+        <Picker
+          selectedValue={selectedQuantumDrive}
+          style={styles.componentPicker}
+          onValueChange={itemValue => setSelectedQuantumDrive(itemValue)}
+        >
+          <Picker.Item label="Select Quantum Drive" value={null} />
+          {quantumDrives.map(quantumDrive => (
+            <Picker.Item key={quantumDrive.name} label={quantumDrive.name} value={quantumDrive.name} />
+          ))}
+        </Picker>
+      </View>
+      <Button title="Save Loadout" onPress={handleSaveLoadout} />
     </View>
   );
 };
+
 
 
 

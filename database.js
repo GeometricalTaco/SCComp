@@ -73,7 +73,7 @@ const QuantumDriveSchema = {
   }
 };
 
-const database = new Realm({
+export const database = new Realm({
   schema: [ShipSchema, WeaponSchema, ShieldSchema, PowerPlantSchema, CoolerSchema, QuantumDriveSchema],
   schemaVersion: 1,
   migration: (oldRealm, newRealm) => {
@@ -99,6 +99,8 @@ export const getShips = () => {
   const ships = database.objects("Ship");
   return ships.sorted("manufacturer").sorted("name");
 }
+
+
 
 //deleteAllShips()
 
