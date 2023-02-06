@@ -463,5 +463,12 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 16
+  },
+  inputField: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    margin: 10,
+    paddingHorizontal: 10
   }
 });
