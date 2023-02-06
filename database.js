@@ -5,37 +5,78 @@ const ShipSchema = {
   properties: {
     name: 'string',
     manufacturer: 'string',
+    weapons: { 
+      type: 'list',
+      objectType: 'Weapon' 
+    },
+    shields: {
+      type: 'list',
+      objectType: 'Shield' 
+    },
+    powerPlants: {
+      type: 'list',
+      objectType: 'PowerPlant' 
+    },
+    coolers: {
+      type: 'list',
+      objectType: 'Cooler' 
+    },
+    quantumDrives: {
+      type: 'list',
+      objectType: 'QuantumDrive' 
+    }
+  }
+};
+
+const WeaponSchema = {
+  name: 'Weapon',
+  properties: {
+    size: 'int',
+    default: 'string',
+    count: { type: 'int', default: 0 }
+  }
+};
+
+const ShieldSchema = {
+  name: 'Shield',
+  properties: {
+    size: 'int',
+    default: 'string',
+    count: { type: 'int', default: 0 }
+  }
+};
+
+const PowerPlantSchema = {
+  name: 'PowerPlant',
+  properties: {
+    size: 'int',
+    default: 'string',
+    count: { type: 'int', default: 0 }
+  }
+};
+
+const CoolerSchema = {
+  name: 'Cooler',
+  properties: {
+    size: 'int',
+    default: 'string',
+    count: { type: 'int', default: 0 }
+  }
+};
+
+const QuantumDriveSchema = {
+  name: 'QuantumDrive',
+  properties: {
+    size: 'int',
+    default: 'string',
+    count: { type: 'int', default: 0 }
   }
 };
 
 const database = new Realm({
-  schema: [ShipSchema]
-})
-
-
-const addShip = newShip => new Promise((resolve, reject) => {
-  Realm.open(database)
-    .then(realm => {
-      realm.write(() => {
-        realm.create('Ship', newShip);
-        resolve(newShip);
-      });
-    })
-    .catch(error => reject(error));
+  schema: [ShipSchema, WeaponSchema, ShieldSchema, PowerPlantSchema, CoolerSchema, QuantumDriveSchema]
 });
 
-
-export const getShips = () => {
-  const ships = database.objects("Ship");
-  return ships.sorted("manufacturer").sorted("name");
-};
-
-const deleteAllShips = () => {
-  return database.write(() => {
-    const allShips = database.objects("Ship");
-    database.delete(allShips);
-  });
-};
 
 //deleteAllShips()
 
