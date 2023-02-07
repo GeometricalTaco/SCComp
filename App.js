@@ -375,6 +375,8 @@ function CreateLoadoutScreen({ navigation, route }) {
       setPowerPlants(powerPlants);
       setCoolers(coolers);
       setQuantumDrives(quantumDrives);
+
+      fetchComponents();
     }
   }, []);
   

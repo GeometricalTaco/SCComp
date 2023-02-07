@@ -73,34 +73,60 @@ const QuantumDriveSchema = {
   }
 };
 
-const createComponents = (realm) => {
-  realm.write(() => {
-    const weapons = realm.create('Weapon', [
-      { size: 1, default: 'Laser Cannon', count: 0 },
-      { size: 2, default: 'Plasma Cannon', count: 0 },
-      { size: 3, default: 'Particle Cannon', count: 0 }
-    ]);
-    const shields = realm.create('Shield', [
-      { size: 1, default: 'Light Shield', count: 0 },
-      { size: 2, default: 'Medium Shield', count: 0 },
-      { size: 3, default: 'Heavy Shield', count: 0 }
-    ]);
-    const powerPlants = realm.create('PowerPlant', [
-      { size: 1, default: 'Nuclear Reactor', count: 0 },
-      { size: 2, default: 'Antimatter Reactor', count: 0 },
-      { size: 3, default: 'Singularity Reactor', count: 0 }
-    ]);
-    const coolers = realm.create('Cooler', [
-      { size: 1, default: 'Radiation Cooler', count: 0 },
-      { size: 2, default: 'Heat Dissipator', count: 0 },
-      { size: 3, default: 'Quantum Cooler', count: 0 }
-    ]);
-    const quantumDrives = realm.create('QuantumDrive', [
-      { size: 1, default: 'Warp Drive', count: 0 },
-      { size: 2, default: 'Hyperspace Drive', count: 0 },
-      { size: 3, default: 'Quantum Leap Drive', count: 0 }
-    ]);
+const addComponents = () => {
+  const weapons = database.objects('Weapon');
+  const shields = database.objects('Shield');
+  const powerPlants = database.objects('PowerPlant');
+  const coolers = database.objects('Cooler');
+  const quantumDrives = database.objects('QuantumDrive');
+
+  database.write(() => {
+    weapons.forEach(weapon => {
+      database.create('Weapon', {
+        size: weapon.size,
+        default: weapon.default,
+        count: weapon.count
+      });
+    });
+
+    shields.forEach(shield => {
+      database.create('Shield', {
+        size: shield.size,
+        default: shield.default,
+        count: shield.count
+      });
+    });
+
+    powerPlants.forEach(powerPlant => {
+      database.create('PowerPlant', {
+        size: powerPlant.size,
+        default: powerPlant.default,
+        count: powerPlant.count
+      });
+    });
+
+    coolers.forEach(cooler => {
+      database.create('Cooler', {
+        size: cooler.size,
+        default: cooler.default,
+        count: cooler.count
+      });
+    });
+
+    quantumDrives.forEach(quantumDrive => {
+      database.create('QuantumDrive', {
+        size: quantumDrive.size,
+        default: quantumDrive.default,
+        count: quantumDrive.count
+      });
+    });
   });
+};
+
+export const getShips = () => {
+  addComponents();
+  const ships = database.objects("Ship");
+  return ships.sorted("manufacturer").sorted("name");
 };
 
 export const database = new Realm({
@@ -123,15 +149,8 @@ export const database = new Realm({
   }
 });
 
-createComponents(database);
 
 
-
-
-export const getShips = () => {
-  const ships = database.objects("Ship");
-  return ships.sorted("manufacturer").sorted("name");
-}
 
 
 
