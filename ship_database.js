@@ -61,11 +61,11 @@ const ShieldGeneratorSchema = {
   }
 };
 
-const database = new Realm({
+const shipDatabase = new Realm({
   schema: [ShipSchema, WeaponSchema, MissileRackSchema, MissileSchema, PowerPlantSchema, CoolerSchema, ShieldGeneratorSchema]
 });
 
-database.write(() => {
+shipDatabase.write(() => {
   const gladius = database.create('Ship', {
     name: 'Gladius',
     manufacturer: 'Aegis Dynamics',

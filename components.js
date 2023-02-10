@@ -5,6 +5,7 @@ const ComponentSchema = {
   name: 'Component',
   properties: {
     name: 'string',
+    type: 'string',
     size: 'int',
     manufacturer: 'string'
   }

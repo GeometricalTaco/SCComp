@@ -12,19 +12,10 @@ const ConfigurationSchema = {
   }
 };
 
-// Define the schema for the Parts database
-const PartsSchema = {
-  name: 'Parts',
-  properties: {
-    name: 'string',
-    type: 'string',
-    size: 'int',
-    manufacturer: 'string'
-  }
-};
+
 
 // Open the databases
-Realm.open({ schema: [ConfigurationSchema, PartsSchema] })
+Realm.open({ schema: [ConfigurationSchema] })
   .then(realm => {
     // Get the selected ship, weapons, missiles, and components
     const selectedShip = ...;

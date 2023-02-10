@@ -1,3 +1,7 @@
+import componentDatabase from "./components"
+import shipDatabase from "./ship_database"
+import Realm from "realm";
+
 const ShipConfigScreen = (props) => {
     // Initialize state variables to store the selected ship, weapons, missiles, power plant, cooler, and shield generator.
     const [selectedShip, setSelectedShip] = useState(null);
@@ -6,6 +10,19 @@ const ShipConfigScreen = (props) => {
     const [selectedPowerPlant, setSelectedPowerPlant] = useState(null);
     const [selectedCooler, setSelectedCooler] = useState(null);
     const [selectedShieldGenerator, setSelectedShieldGenerator] = useState(null);
+
+    // Define the schema for the Configuration database
+    const ConfigurationSchema = {
+      name: 'Configuration',
+      properties: {
+        shipName: 'string',
+        shipManufacturer: 'string',
+        weapons: 'list',
+        missiles: 'list',
+        components: 'list'
+      }
+    };
+
 
     // A function to render the weapon selector component
     const renderWeaponSelector = () => {
@@ -158,27 +175,36 @@ const ShipConfigScreen = (props) => {
             <Button
               title="Save Configuration"
               onPress={() => {
-                Realm.open(databaseConfig)
+                // Open the databases
+                Realm.open({ schema: [ConfigurationSchema] })
                   .then(realm => {
+                    // Get the selected ship, weapons, missiles, and components
+                    const selectedShip = ...;
+                    const selectedWeapons = ...;
+                    const selectedMissiles = ...;
+                    const selectedComponents = ...;
+
+                    // Create a new configuration object
+                    const newConfiguration = {
+                      shipName: selectedShip.name,
+                      shipManufacturer: selectedShip.manufacturer,
+                      weapons: selectedWeapons,
+                      missiles: selectedMissiles,
+                      components: selectedComponents
+                    };
+
+                    // Write the new configuration to the Configuration database
                     realm.write(() => {
-                      const newConfig = {
-                        shipName: selectedShip.name,
-                        weapons: selectedWeapons,
-                        missiles: selectedMissiles,
-                        components: selectedComponents
-                      };
-                      realm.create('Configuration', newConfig);
+                      realm.create('Configuration', newConfiguration);
                     });
-                    navigation.pop();
-                })
-                .catch(error => {
-                    console.log("Error opening realm", error);
-                });
-            }}
+                  })
+                  .catch(error => {
+                    console.error(error);
+                  });
+
+              }}
             />
           )}
         </View>
     );
 };
-    
-  

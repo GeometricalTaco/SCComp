@@ -15,6 +15,7 @@ import Icons from './assets/icons';
 const ships = getShips();
 console.log(ships)
 
+
 //1A1B1E
 
 function HomeScreen({ navigation }) {
