@@ -2,7 +2,7 @@ import componentDatabase from "./components"
 import shipDatabase from "./ship_database"
 import Realm from "realm";
 
-const ShipConfigScreen = (props) => {
+function ShipConfigScreen({ navigation }) {
     // Initialize state variables to store the selected ship, weapons, missiles, power plant, cooler, and shield generator.
     const [selectedShip, setSelectedShip] = useState(null);
     const [selectedWeapons, setSelectedWeapons] = useState([]);
