@@ -17,11 +17,13 @@ const ShipSchema = {
     manufacturer: 'string',
     weapons: 'Weapon[]',
     missileRacks: 'MissileRack[]',
+    missiles: 'Missiles[]',
     powerPlants: 'PowerPlant[]',
     coolers: 'Cooler[]',
     shieldGenerators: 'ShieldGenerator[]'
   }
 };
+
 
 // Define the schema for the Weapon object
 const WeaponSchema = {
@@ -88,6 +90,31 @@ const ShieldGeneratorSchema = {
   }
 };
 
+// Define the schema for the Configuration database
+const ConfigurationSchema = {
+  name: 'Configuration',
+  properties: {
+    shipName: 'string',
+    shipManufacturer: 'string',
+    weapons: 'list',
+    missileRacks: 'list',
+    missiles: 'list',
+    powerPlants: 'list',
+    coolers: 'list',
+    shieldGenerators: 'list'
+  }
+};
+
+
+const realm = await Realm.open({
+  path: "./realm-files/ship_database",
+  schema: [ShipSchema],
+});
+
+realm.write(() => {
+  const avenger_titan = realm.create("Ship", { name: "Avenger Titan", manufacturer: "Aegis Dynamics", weapons: ["placeholder"], missileRacks: ["placeholder"], missiles: ["placeholder"], powerPlants: ["placeholder"], coolers: ["placeholder"], shieldGenerators: ["placeholder"]})
+})
+
 const Stack = createNativeStackNavigator();
 
 import Icons from './assets/icons';
@@ -136,6 +163,7 @@ function HomeScreen({ navigation }) {
 
 
 function ShipScreen({ navigation }) {
+  const getShips = realm.objects("Ship")
   const [ships, setShips] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredShips, setFilteredShips] = useState([]);
@@ -415,21 +443,8 @@ function ShipConfigScreen({ navigation }) {
   const [selectedPowerPlants, setSelectedPowerPlants] = useState(null);
   const [selectedCoolers, setSelectedCoolers] = useState(null);
   const [selectedShieldGenerators, setSelectedShieldGenerators] = useState(null);
-
-  // Define the schema for the Configuration database
-  const ConfigurationSchema = {
-    name: 'Configuration',
-    properties: {
-      shipName: 'string',
-      shipManufacturer: 'string',
-      weapons: 'list',
-      missileRacks: 'list',
-      missiles: 'list',
-      powerPlants: 'list',
-      coolers: 'list',
-      shieldGenerators: 'list'
-    }
-  };
+  
+  
 };
 
 
