@@ -6,7 +6,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Picker } from '@react-native-picker/picker'
-
+import { getShips } from './ships_database'
 
 
 // Define the schema for the Ship object
@@ -105,22 +105,38 @@ const ConfigurationSchema = {
   }
 };
 
+// async function updateRealmShips() {
+//   const realm = await Realm.open({
+//     path: "./realm-files/ship_database",
+//     schema: [ShipSchema],
+//   });
 
-const realm = await Realm.open({
-  path: "./realm-files/ship_database",
-  schema: [ShipSchema],
-});
+//   realm.write(() => {
+//     ships = realm.create("Ship", { name: "Avenger Titan", manufacturer: "Aegis Dynamics", weapons: ["placeholder"], missileRacks: ["placeholder"], missiles: ["placeholder"], powerPlants: ["placeholder"], coolers: ["placeholder"], shieldGenerators: ["placeholder"]})
+//   })
+// }
 
-realm.write(() => {
-  const avenger_titan = realm.create("Ship", { name: "Avenger Titan", manufacturer: "Aegis Dynamics", weapons: ["placeholder"], missileRacks: ["placeholder"], missiles: ["placeholder"], powerPlants: ["placeholder"], coolers: ["placeholder"], shieldGenerators: ["placeholder"]})
-})
+// async function getShips() {
+//   const realm = await Realm.open({
+//     path: "./realm-files/ship_database",
+//     schema: [ShipSchema],
+//   });
+
+//   const getShips = () => {
+//     return realm.objects("Ship").sorted("manufacturer, name");
+//   };
+
+// }
+
+
+
+// updateRealmShips()
+
 
 const Stack = createNativeStackNavigator();
 
 import Icons from './assets/icons';
 
-const ships = getShips();
-console.log(ships)
 
 
 //1A1B1E
@@ -163,33 +179,17 @@ function HomeScreen({ navigation }) {
 
 
 function ShipScreen({ navigation }) {
-  const getShips = realm.objects("Ship")
   const [ships, setShips] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredShips, setFilteredShips] = useState([]);
 
   useEffect(() => {
     const ships = getShips();
     setShips(ships);
-    setFilteredShips(ships);
   }, []);
-
-  useEffect(() => {
-    setFilteredShips(ships.filter(ship => ship.name.toLowerCase().includes(searchTerm.toLowerCase())));
-  }, [searchTerm, ships]);
 
   return (
     <View style={styles.container}>
-      <View style={styles.inputField}>
-        <TextInput
-          style={styles.input}
-          placeholder="Search for a ship..."
-          value={searchTerm}
-          onChangeText={setSearchTerm}
-        />
-      </View>
       <ScrollView>
-        {filteredShips.map((item) => {
+        {ships.map((item) => {
           const manufacturerKey = item.manufacturer.toLowerCase().split(' ').join('_');
           const nameKey = item.name.toLowerCase().split(' ').join('_');
           try {
@@ -434,7 +434,7 @@ function ViewLoadoutsScreen({ navigation }) {
 
 
 
-function ShipConfigScreen({ navigation }) {
+function CreateLoadoutScreen({ navigation }) {
   // Initialize state variables to store the selected ship, weapons, missiles, power plant, cooler, and shield generator.
   const [selectedShip, setSelectedShip] = useState(null);
   const [selectedWeapons, setSelectedWeapons] = useState([]);
