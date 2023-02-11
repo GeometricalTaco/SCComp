@@ -5,14 +5,16 @@ const ShipSchema = {
   properties: {
     name: 'string',
     manufacturer: 'string',
-    weapons: 'Weapon[]',
-    missileRacks: 'MissileRack[]',
-    missiles: 'Missiles[]',
-    powerPlants: 'PowerPlant[]',
-    coolers: 'Cooler[]',
-    shieldGenerators: 'ShieldGenerator[]'
+    //weapons: 'Weapon[]',
+    //missileRacks: 'MissileRack[]',
+    //missiles: 'Missiles[]',
+    //powerPlants: 'PowerPlant[]',
+    //coolers: 'Cooler[]',
+    //shieldGenerators: 'ShieldGenerator[]'
   }
 };
+
+
 
 const databaseOptions = {
   path: 'ships.realm',
@@ -23,19 +25,43 @@ const databaseOptions = {
 const addShip = newShip => new Promise((resolve, reject) => {
   Realm.open(databaseOptions)
     .then(realm => {
-      realm.write(() => {
-        realm.create('Ship', newShip);
-        resolve(newShip);
-      });
+      console.log("Realm database opened successfully")
+      try {
+        realm.write(() => {
+          realm.create('Ship', newShip);
+          console.lot("New ship successfully added:", newShip)
+          resolve(newShip);
+        });
+      } catch (error) {
+        console.error(error)
+        reject(error)
+      }
     })
-    .catch(error => reject(error));
+    .catch(error => {
+      console.log("Error adding new ship", error);
+      reject(error);
+    })
 });
 
 const getShips = () => {
-    return databaseOptions.objects("Ship").sorted("manufacturer, name");
+    return new Promise((resolve, reject) => {
+      Realm.open(databaseOptions)
+        .then(realm => {
+          const ships = Array.from(realm.objects("Ship").sorted("manufacturer, name"));
+          console.log(ships)
+          resolve(ships);
+        })
+        .catch(error => {
+          console.log(error);
+          reject(error);
+        });
+    });
 };
+
+
+// addShip({ name: "Avenger Titan", manufacturer: "Aegis Dynamics", weapons: ["placeholder"], missileRacks: ["placeholder"], missiles: ["placeholder"], powerPlants: ["placeholder"], coolers: ["placeholder"], shieldGenerators: ["placeholder"]});
 
 export default { addShip, getShips };
 
 // Add some ships to the database
-addShip({ name: "Avenger Titan", manufacturer: "Aegis Dynamics", weapons: ["placeholder"], missileRacks: ["placeholder"], missiles: ["placeholder"], powerPlants: ["placeholder"], coolers: ["placeholder"], shieldGenerators: ["placeholder"]});
+addShip({ name: "Avenger Titan", manufacturer: "Aegis Dynamics" });

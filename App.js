@@ -6,7 +6,9 @@ import SelectDropdown from "react-native-select-dropdown";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Picker } from '@react-native-picker/picker'
-import { getShips } from './ships_database'
+import { getShips, addShip } from './ships_database'
+
+
 
 
 // Define the schema for the Ship object
@@ -182,10 +184,22 @@ function ShipScreen({ navigation }) {
   const [ships, setShips] = useState([]);
 
   useEffect(() => {
-    const ships = getShips();
-    setShips(ships);
+    const fetchShips = async () => {
+      try{
+        const result  = await getShips();
+        console.log(result);
+        const ships = Array.from(result)
+        setShips(ships);
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchShips();
   }, []);
 
+  if (!ships.length) {
+    return (<Text>No ships found</Text>)
+  }
   return (
     <View style={styles.container}>
       <ScrollView>
