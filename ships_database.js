@@ -22,14 +22,14 @@ const databaseOptions = {
   schemaVersion: 0
 };
 
-const addShip = newShip => new Promise((resolve, reject) => {
+export const addShip = newShip => new Promise((resolve, reject) => {
   Realm.open(databaseOptions)
     .then(realm => {
       console.log("Realm database opened successfully")
       try {
         realm.write(() => {
           realm.create('Ship', newShip);
-          console.lot("New ship successfully added:", newShip)
+          console.log("New ship successfully added:", newShip)
           resolve(newShip);
         });
       } catch (error) {
@@ -43,11 +43,14 @@ const addShip = newShip => new Promise((resolve, reject) => {
     })
 });
 
-const getShips = () => {
+export const getShips = () => {
     return new Promise((resolve, reject) => {
       Realm.open(databaseOptions)
         .then(realm => {
-          const ships = Array.from(realm.objects("Ship").sorted("manufacturer, name"));
+          const ships = Array.from(realm.objects("Ship").sorted([
+            "manufacturer", 
+            "name"
+          ]));
           console.log(ships)
           resolve(ships);
         })
@@ -58,10 +61,25 @@ const getShips = () => {
     });
 };
 
+export const clearShips = () => {
+  return new Promise((resolve, reject) => {
+    Realm.open(databaseOptions)
+      .then(realm => {
+        realm.write(() => {
+          realm.deleteAll();
+        })
+      })
+      .catch(error => {
+        console.log(error);
+        reject(error)
+      });
+  });
+};
+
+//clearShips();
+
 
 // addShip({ name: "Avenger Titan", manufacturer: "Aegis Dynamics", weapons: ["placeholder"], missileRacks: ["placeholder"], missiles: ["placeholder"], powerPlants: ["placeholder"], coolers: ["placeholder"], shieldGenerators: ["placeholder"]});
 
-export default { addShip, getShips };
-
 // Add some ships to the database
-addShip({ name: "Avenger Titan", manufacturer: "Aegis Dynamics" });
+//addShip({ name: "Avenger Titan", manufacturer: "Aegis Dynamics" });

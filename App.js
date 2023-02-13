@@ -583,7 +583,7 @@ const styles = StyleSheet.create({
   shipContainer: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 16
+    padding: 16,
   },
   icon: {
     width: 64,
@@ -594,10 +594,12 @@ const styles = StyleSheet.create({
     marginLeft: 10
   },
   manufacturer: {
-    fontWeight: "bold"
+    fontWeight: "bold",
+    color: "white",
   },
   name: {
-    fontSize: 16
+    fontSize: 16,
+    color: "white",
   },
   inputField: {
     height: 40,
