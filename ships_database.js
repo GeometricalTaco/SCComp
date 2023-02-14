@@ -11,6 +11,10 @@ const ShipSchema = {
     //powerPlants: 'PowerPlant[]',
     //coolers: 'Cooler[]',
     //shieldGenerators: 'ShieldGenerator[]'
+    // availableComponents: {
+    //   weapons: [4, 4, 4, 4],
+    //   missileRacks
+    // }
   }
 };
 

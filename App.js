@@ -458,7 +458,12 @@ function CreateLoadoutScreen({ navigation }) {
   const [selectedCoolers, setSelectedCoolers] = useState(null);
   const [selectedShieldGenerators, setSelectedShieldGenerators] = useState(null);
   
-  
+  // Array with amount of weapons, with size for each
+  // Use array.map function in js to create the correct amount of dropdown selectors
+  // for more complex stuff you could instead populate said array with objects instead e.g.
+  // [
+  //   { min: 4, max: 5,  }
+  // ]
 };
 
 
