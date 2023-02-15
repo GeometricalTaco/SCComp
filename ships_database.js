@@ -1,10 +1,13 @@
 import Realm from 'realm';
 
+
+
 const ShipSchema = {
   name: 'Ship',
   properties: {
     name: 'string',
     manufacturer: 'string',
+    availableWeapons: 'WeaponSlots[]'
     //weapons: 'Weapon[]',
     //missileRacks: 'MissileRack[]',
     //missiles: 'Missiles[]',
@@ -18,6 +21,13 @@ const ShipSchema = {
   }
 };
 
+const WeaponSlotsSchema = {
+  name: "WeaponSlots",
+  properties: {
+    size: 'int',
+    amount: 'int'
+  }
+};
 
 
 const databaseOptions = {
@@ -86,4 +96,4 @@ export const clearShips = () => {
 // addShip({ name: "Avenger Titan", manufacturer: "Aegis Dynamics", weapons: ["placeholder"], missileRacks: ["placeholder"], missiles: ["placeholder"], powerPlants: ["placeholder"], coolers: ["placeholder"], shieldGenerators: ["placeholder"]});
 
 // Add some ships to the database
-//addShip({ name: "Avenger Titan", manufacturer: "Aegis Dynamics" });
+//addShip({ name: "Avenger Titan", manufacturer: "Aegis Dynamics", availableWeapons: [[3, 2], [4, 1]] });
