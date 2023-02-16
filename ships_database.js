@@ -32,8 +32,8 @@ const WeaponSlotsSchema = {
 
 const databaseOptions = {
   path: 'ships.realm',
-  schema: [ShipSchema],
-  schemaVersion: 0
+  schema: [ShipSchema, WeaponSlotsSchema],
+  schemaVersion: 1
 };
 
 export const addShip = newShip => new Promise((resolve, reject) => {
