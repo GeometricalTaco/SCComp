@@ -74,10 +74,8 @@ export const clearWeapons = () => {
   });
 };
 
-//clearShips();
+//clearWeapons();
 
+// addWeapon({ name: "Mantis GT-220", manufacturer: "Gallensob Tactical Systems", size: 3, type: "Ballistic Gattling"})
+// addWeapon({ name: "CF-227 Badger Repeater", manufacturer: "Klaus & Werner", size: 2, type: "Laser Repeater"})
 
-// addShip({ name: "Avenger Titan", manufacturer: "Aegis Dynamics", weapons: ["placeholder"], missileRacks: ["placeholder"], missiles: ["placeholder"], powerPlants: ["placeholder"], coolers: ["placeholder"], shieldGenerators: ["placeholder"]});
-
-// Add some ships to the database
-//addShip({ name: "Avenger Titan", manufacturer: "Aegis Dynamics", availableWeapons: [[3, 2], [4, 1]] });

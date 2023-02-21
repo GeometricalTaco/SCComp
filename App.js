@@ -7,6 +7,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Picker } from '@react-native-picker/picker'
 import { getShips, addShip } from './ships_database'
+import { getWeapons } from "./weapons_database";
 
 
 
@@ -353,8 +354,10 @@ function ViewLoadoutsScreen({ navigation }) {
 
 
 function CreateLoadoutScreen({ navigation }) {
+  const [ships, setShips] = useState([]);
+  const [weapons, setWeapons] = useState([]);
   // Initialize state variables to store the selected ship, weapons, missiles, power plant, cooler, and shield generator.
-  const [selectedShip, setSelectedShip] = useState(null);
+  const [selectedShip, setSelectedShip] = useState("Avenger Titan");
   const [selectedWeapons, setSelectedWeapons] = useState([]);
   const [selectedMissileRack, setSelectedMissileRack] = useState([]);
   const [selectedMissiles, setSelectedMissiles] = useState([]);
@@ -362,12 +365,58 @@ function CreateLoadoutScreen({ navigation }) {
   const [selectedCoolers, setSelectedCoolers] = useState(null);
   const [selectedShieldGenerators, setSelectedShieldGenerators] = useState(null);
   
-  // Array with amount of weapons, with size for each
   // Use array.map function in js to create the correct amount of dropdown selectors
   // for more complex stuff you could instead populate said array with objects instead e.g.
   // [
   //   { min: 4, max: 5,  }
   // ]
+
+  useEffect(() => {
+    const fetchShips = async () => {
+      try{
+        const result  = await getShips();
+        console.log(result);
+        const ships = Array.from(result)
+        setShips(ships);
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchShips();
+  }, []);
+
+  useEffect(() => {
+    const fetchWeapons = async () => {
+      try{
+        const result  = await getWeapons();
+        console.log(result);
+        const weapons = Array.from(result)
+        setWeapons(weapons);
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchWeapons();
+  }, []);
+
+  return(
+    <View style={styles.container}>
+      <Text>Create Loadout Screen wow</Text>
+      <SelectDropdown
+        data={ships}
+        defaultButtonText={selectedShip}
+        onSelect={(selectedItem, index) => {
+          console.log(selectedItem, index)
+        }}
+        buttonTextAfterSelection={(selectedItem, index) => {
+          return selectedItem
+        }}
+        rowTextForSelection={(item, index) => {
+          return item
+        }}
+      />
+    </View>
+  )
 };
 
 
