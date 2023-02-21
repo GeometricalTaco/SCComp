@@ -400,44 +400,44 @@ function CreateLoadoutScreen({ navigation }) {
   }, []);
 
   const shipNames = ships.map((ship) => ship.name)
-  const shipWeaponSlots = ships.map((ship) => ship.availableWeapons)
 
-  return(
+  return (
     <View style={styles.container}>
-      <Text>Create Loadout Screen wow</Text>
-        <SelectDropdown
-          data={shipNames}
-          defaultButtonText={selectedShip}
-          onSelect={(selectedItem, index) => {
-            console.log(selectedItem, index)
-          }}
-          buttonTextAfterSelection={(selectedItem, index) => {
-            return selectedItem
-          }}
-          rowTextForSelection={(item, index) => {
-            return item
-          }}
-        />
+      <Text>Create Loadout Screen</Text>
+      <SelectDropdown
+        data={shipNames}
+        defaultButtonText={selectedShip}
+        onSelect={(selectedItem, index) => {
+          setSelectedShip(selectedItem);
+        }}
+        buttonTextAfterSelection={(selectedItem, index) => {
+          return selectedItem;
+        }}
+        rowTextForSelection={(item, index) => {
+          return item;
+        }}
+      />
+      {selectedShip && (
         <ScrollView>
-          {shipWeaponSlots.map((weaponSlot) => {
+          {selectedShip.availableWeapons.map((weaponSlot) => {
             try {
               return (
                 <View style={styles.shipContainer} key={weaponSlot[0]}>
                   <Text>Weapon Slot Size: {weaponSlot[0]}</Text>
-                  {/* <SelectDropdown
+                  <SelectDropdown
                     data={weapons
                       .filter(weapon => weapon.size === weaponSlot[0] || weapon.size === (weaponSlot[0] - 1))
                       .map(weapon => weapon.name)}
                     onSelect={(selectedItem, index) => {
-                      console.log(selectedItem, index)
+                      console.log(selectedItem, index);
                     }}
                     buttonTextAfterSelection={(selectedItem, index) => {
-                      return selectedItem
+                      return selectedItem;
                     }}
                     rowTextForSelection={(item, index) => {
-                      return item
+                      return item;
                     }}
-                  /> */}
+                  />
                 </View>
               );
             } catch (e) {
@@ -446,6 +446,7 @@ function CreateLoadoutScreen({ navigation }) {
             }
           })}
         </ScrollView>
+      )}
     </View>
   )
 };
