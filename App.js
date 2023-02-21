@@ -399,22 +399,24 @@ function CreateLoadoutScreen({ navigation }) {
     fetchWeapons();
   }, []);
 
+  const shipNames = ships.map((ship) => ship.name)
+
   return(
     <View style={styles.container}>
       <Text>Create Loadout Screen wow</Text>
-      <SelectDropdown
-        data={ships}
-        defaultButtonText={selectedShip}
-        onSelect={(selectedItem, index) => {
-          console.log(selectedItem, index)
-        }}
-        buttonTextAfterSelection={(selectedItem, index) => {
-          return selectedItem
-        }}
-        rowTextForSelection={(item, index) => {
-          return item
-        }}
-      />
+        <SelectDropdown
+          data={shipNames}
+          defaultButtonText={selectedShip}
+          onSelect={(selectedItem, index) => {
+            console.log(selectedItem, index)
+          }}
+          buttonTextAfterSelection={(selectedItem, index) => {
+            return selectedItem
+          }}
+          rowTextForSelection={(item, index) => {
+            return item
+          }}
+        />
     </View>
   )
 };
