@@ -417,6 +417,30 @@ function CreateLoadoutScreen({ navigation }) {
             return item
           }}
         />
+        {ships.availableWeapons.map((weaponSlot) => {
+          try {
+            return (
+              <View style={styles.shipContainer} key={weaponSlot[0]}>
+                <Text>Weapon Slot Size: {weaponSlot[0]}</Text>
+                <SelectDropdown
+                  data={weapons.filter(weapon => weapon.size === weaponSlot[0] || weapon.size === (weaponSlot[0] - 1))}
+                  onSelect={(selectedItem, index) => {
+                    console.log(selectedItem, index)
+                  }}
+                  buttonTextAfterSelection={(selectedItem, index) => {
+                    return selectedItem
+                  }}
+                  rowTextForSelection={(item, index) => {
+                    return item
+                  }}
+                />
+              </View>
+            );
+          } catch (e) {
+            console.log(e);
+            return null;
+          }
+        })}
     </View>
   )
 };
