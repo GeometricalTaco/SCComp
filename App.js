@@ -421,23 +421,30 @@ function CreateLoadoutScreen({ navigation }) {
           {selectedShip.availableWeapons.map((weaponSlot, index) => {
             try {
               return (
-                <View style={styles.shipContainer} key={index}>
-                  <Text style={styles.text}>Weapon Slot Size: {weaponSlot[0]}</Text>
-                  <SelectDropdown
-                    data={weapons
-                      .filter(weapon => weapon.size === weaponSlot[0] || weapon.size === (weaponSlot[0] - 1))
-                      .map(weapon => weapon.name)}
-                    onSelect={(selectedItem, index) => {
-                      console.log(selectedItem, index);
-                    }}
-                    buttonTextAfterSelection={(selectedItem, index) => {
-                      return selectedItem;
-                    }}
-                    rowTextForSelection={(item, index) => {
-                      return item;
-                    }}
-                  />
-                </View>
+                <>
+                  {[...Array(weaponSlot.amount)].map((_, slot) => {
+                    return (
+                      <View style={styles.container} key={`${index}-${slot}`}>
+                        <Text style={styles.text}>Weapon Slot Size: {weaponSlot.size}</Text>
+                        <SelectDropdown
+                          data={weapons
+                            .filter(weapon => weapon.size === weaponSlot.size || weapon.size === (weaponSlot.size - 1))
+                            .map(weapon => weapon.name)}
+                          onSelect={(selectedItem, index) => {
+                            console.log(selectedItem, index, slot);
+                          }}
+                          buttonTextAfterSelection={(selectedItem, index) => {
+                            return selectedItem;
+                          }}
+                          rowTextForSelection={(item, index) => {
+                            return item;
+                          }}
+                        />
+                      </View>
+                    )
+                  })}
+                </>
+                
               );
             } catch (e) {
               console.log(e);
