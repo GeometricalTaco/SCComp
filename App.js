@@ -357,7 +357,7 @@ function CreateLoadoutScreen({ navigation }) {
   const [ships, setShips] = useState([]);
   const [weapons, setWeapons] = useState([]);
   // Initialize state variables to store the selected ship, weapons, missiles, power plant, cooler, and shield generator.
-  const [selectedShip, setSelectedShip] = useState("Avenger Titan");
+  const [selectedShip, setSelectedShip] = useState(null);
   const [selectedWeapons, setSelectedWeapons] = useState([]);
   const [selectedMissileRack, setSelectedMissileRack] = useState([]);
   const [selectedMissiles, setSelectedMissiles] = useState([]);
