@@ -399,31 +399,30 @@ function CreateLoadoutScreen({ navigation }) {
     fetchWeapons();
   }, []);
 
-  const shipNames = ships.map((ship) => ship.name)
 
   return (
     <View style={styles.container}>
-      <Text>Create Loadout Screen</Text>
+      <Text style={styles.text}>Create Loadout Screen</Text>
       <SelectDropdown
-        data={shipNames}
+        data={ships}
         defaultButtonText={selectedShip}
         onSelect={(selectedItem, index) => {
           setSelectedShip(selectedItem);
         }}
-        buttonTextAfterSelection={(selectedItem, index) => {
-          return selectedItem;
+        buttonTextAfterSelection={(item, index) => {
+          return item.name;
         }}
         rowTextForSelection={(item, index) => {
-          return item;
+            return item.name;
         }}
       />
       {selectedShip && (
         <ScrollView>
-          {selectedShip.availableWeapons.map((weaponSlot) => {
+          {selectedShip.availableWeapons.map((weaponSlot, index) => {
             try {
               return (
-                <View style={styles.shipContainer} key={weaponSlot[0]}>
-                  <Text>Weapon Slot Size: {weaponSlot[0]}</Text>
+                <View style={styles.shipContainer} key={index}>
+                  <Text style={styles.text}>Weapon Slot Size: {weaponSlot[0]}</Text>
                   <SelectDropdown
                     data={weapons
                       .filter(weapon => weapon.size === weaponSlot[0] || weapon.size === (weaponSlot[0] - 1))
