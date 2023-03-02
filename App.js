@@ -355,6 +355,8 @@ function CreateLoadoutScreen({ navigation }) {
   const [ships, setShips] = useState([]);
   const [weapons, setWeapons] = useState([]);
   // Initialize state variables to store the selected ship, weapons, missiles, power plant, cooler, and shield generator.
+  const [selectedName, setSelectedName] = useState('');
+  const [nameError, setNameError] = useState(false);
   const [selectedShip, setSelectedShip] = useState(null);
   const [selectedWeapons, setSelectedWeapons] = useState([]);
 
@@ -399,17 +401,40 @@ function CreateLoadoutScreen({ navigation }) {
   }, []);
 
   const onSave = async () => {
-    console.log(selectedWeapons);
-    const loadout = {
-      ship: selectedShip.name,
+    console.log(selectedName);
 
-    }
+    if (selectedName.length < 1) {
+      setNameError(true);
+      return;
+    } else {
+      setNameError(false);
+    };
+    
+    const loadout = {
+      name: selectedName,
+      ship: selectedShip.name,
+      weapons: selectedWeapons,
+    };
+
+    await saveLoadout(loadout);
+    navigation.goBack();
   };
 
+  useEffect(() => {
+    if (nameError && selectedName.length > 0) {
+      setNameError(false);
+    };
+  }, [selectedName]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Create Loadout Screen</Text>
+      {nameError && <Text style={{...styles.text, color: 'red' }}>Please Name It!</Text>}
+      <TextInput
+        style={styles.input}
+        onChangeText={text => setSelectedName(text)}
+        value={selectedName}
+      />
       <SelectDropdown
         data={ships}
         defaultButtonText={selectedShip}
@@ -438,7 +463,7 @@ function CreateLoadoutScreen({ navigation }) {
                             .filter(weapon => weapon.size === weaponSlot.size || weapon.size === (weaponSlot.size - 1))
                             .map(weapon => weapon.name)}
                           onSelect={(selectedItem, index) => {
-                            console.log("select weapon", selectedItem, weaponSlot.size, slot);
+                            //console.log("select weapon", selectedItem, weaponSlot.size, slot);
                             // Get rid of the weapon that is currently occupying this slot
                             const weapons = [...selectedWeapons].filter(w => !(w.size === weaponSlot.size && w.slot === slot));
                             // Add the weapon

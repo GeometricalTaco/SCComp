@@ -3,6 +3,7 @@ import Realm from 'realm';
 const LoadoutSchema = {
   name: 'Loadout',
   properties: {
+    name: 'string',
     ship: 'string',
     weapons: 'Weapons[]'
   }
@@ -20,7 +21,7 @@ const WeaponsSchema = {
 const databaseOptions = {
   path: 'loadouts.realm',
   schema: [LoadoutSchema, WeaponsSchema],
-  schemaVersion: 0
+  schemaVersion: 2
 };
 
 export const saveLoadout = loadout => new Promise((resolve, reject) => {
