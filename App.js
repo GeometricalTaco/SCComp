@@ -8,7 +8,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Picker } from '@react-native-picker/picker'
 import { getShips, addShip } from './ships_database'
 import { getWeapons } from "./weapons_database";
-
+import { saveLoadout, getLoadouts } from "./loadout_database";
 
 
 
@@ -43,8 +43,6 @@ import { getWeapons } from "./weapons_database";
 const Stack = createNativeStackNavigator();
 
 import Icons from './assets/icons';
-
-
 
 //1A1B1E
 
@@ -359,6 +357,7 @@ function CreateLoadoutScreen({ navigation }) {
   // Initialize state variables to store the selected ship, weapons, missiles, power plant, cooler, and shield generator.
   const [selectedShip, setSelectedShip] = useState(null);
   const [selectedWeapons, setSelectedWeapons] = useState([]);
+
   const [selectedMissileRack, setSelectedMissileRack] = useState([]);
   const [selectedMissiles, setSelectedMissiles] = useState([]);
   const [selectedPowerPlants, setSelectedPowerPlants] = useState(null);
@@ -399,6 +398,14 @@ function CreateLoadoutScreen({ navigation }) {
     fetchWeapons();
   }, []);
 
+  const onSave = async () => {
+    console.log(selectedWeapons);
+    const loadout = {
+      ship: selectedShip.name,
+
+    }
+  };
+
 
   return (
     <View style={styles.container}>
@@ -431,7 +438,16 @@ function CreateLoadoutScreen({ navigation }) {
                             .filter(weapon => weapon.size === weaponSlot.size || weapon.size === (weaponSlot.size - 1))
                             .map(weapon => weapon.name)}
                           onSelect={(selectedItem, index) => {
-                            console.log(selectedItem, index, slot);
+                            console.log("select weapon", selectedItem, weaponSlot.size, slot);
+                            // Get rid of the weapon that is currently occupying this slot
+                            const weapons = [...selectedWeapons].filter(w => !(w.size === weaponSlot.size && w.slot === slot));
+                            // Add the weapon
+                            weapons.push({
+                              size: weaponSlot.size,
+                              slot: slot,
+                              name: selectedItem,
+                            });
+                            setSelectedWeapons(weapons);
                           }}
                           buttonTextAfterSelection={(selectedItem, index) => {
                             return selectedItem;
@@ -442,15 +458,18 @@ function CreateLoadoutScreen({ navigation }) {
                         />
                       </View>
                     )
+
                   })}
                 </>
-                
               );
             } catch (e) {
               console.log(e);
               return null;
             }
           })}
+          <Pressable style={styles.buttons} onPress={onSave}>
+            <Text style={styles.text}>Create Loadout</Text>
+          </Pressable>
         </ScrollView>
       )}
     </View>
