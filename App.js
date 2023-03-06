@@ -342,9 +342,50 @@ function LoadoutScreen({ navigation }) {
 }
 
 function ViewLoadoutsScreen({ navigation }) {
+  const [loadouts, setLoadouts] = useState([]);
+
+  useEffect(() => {
+    const fetchLoadouts = async () => {
+      try{
+        const result  = await getLoadouts();
+        console.log(result);
+        const loadouts = Array.from(result)
+        setLoadouts(loadouts);
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchLoadouts();
+  }, []);
+
+  if (!loadouts.length) {
+    return (<Text>No loadouts found</Text>)
+  }
   return (
     <View style={styles.container}>
-      <Text>View Loadouts screen</Text>
+      <ScrollView>
+        {loadouts.map((item) => {
+          const nameKey = item.name;
+          const shipKey = item.ship.toLowerCase().split(' ').join('_');
+          try {
+            return (
+              <View style={styles.shipContainer} key={item.name}>
+                {/* <Image
+                  source={Icons[manufacturerKey]?.[nameKey]}
+                  style={styles.icon}
+                /> */}
+                <View style={styles.textContainer}>
+                  <Text style={styles.name}>{item.name}</Text>
+                  <Text style={styles.manufacturer}>{item.ship}</Text>
+                </View>
+              </View>
+            );
+          } catch (e) {
+            console.log(e);
+            return null;
+          }
+        })}
+      </ScrollView>
     </View>
   );
 }
