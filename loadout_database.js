@@ -59,3 +59,18 @@ export const getLoadouts = () => {
         });
     });
 };
+
+export const clearLoadouts = () => {
+  return new Promise((resolve, reject) => {
+    Realm.open(databaseOptions)
+      .then(realm => {
+        realm.write(() => {
+          realm.deleteAll();
+        })
+      })
+      .catch(error => {
+        console.log(error);
+        reject(error)
+      });
+  });
+};

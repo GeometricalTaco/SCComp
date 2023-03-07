@@ -395,6 +395,8 @@ function ViewLoadoutsScreen({ navigation }) {
 function CreateLoadoutScreen({ navigation }) {
   const [ships, setShips] = useState([]);
   const [weapons, setWeapons] = useState([]);
+  const [loadouts, setLoadouts] = useState([]);
+
   // Initialize state variables to store the selected ship, weapons, missiles, power plant, cooler, and shield generator.
   const [selectedName, setSelectedName] = useState('');
   const [nameError, setNameError] = useState(false);
@@ -412,6 +414,8 @@ function CreateLoadoutScreen({ navigation }) {
   // [
   //   { min: 4, max: 5,  }
   // ]
+
+  
 
   useEffect(() => {
     const fetchShips = async () => {
@@ -441,15 +445,36 @@ function CreateLoadoutScreen({ navigation }) {
     fetchWeapons();
   }, []);
 
+  useEffect(() => {
+    const fetchLoadouts = async () => {
+      try{
+        const result  = await getLoadouts();
+        console.log(result);
+        const loadouts = Array.from(result)
+        setLoadouts(loadouts);
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchLoadouts();
+  }, []);
+
   const onSave = async () => {
     console.log(selectedName);
 
     if (selectedName.length < 1) {
-      setNameError(true);
+      setNameError("Please Be the right length!!");
       return;
     } else {
       setNameError(false);
     };
+
+    if (loadouts.find(loadout => loadout.name === selectedName)) {
+      setNameError("Name taken!!");
+      return;
+    } else {
+      setNameError(false);
+    }
     
     const loadout = {
       name: selectedName,
@@ -470,7 +495,7 @@ function CreateLoadoutScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Create Loadout Screen</Text>
-      {nameError && <Text style={{...styles.text, color: 'red' }}>Please Name It!</Text>}
+      {nameError && <Text style={{...styles.text, color: 'red' }}>{nameError}</Text>}
       <TextInput
         style={styles.input}
         onChangeText={text => setSelectedName(text)}
