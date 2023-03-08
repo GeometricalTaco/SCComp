@@ -4,7 +4,8 @@ const LoadoutSchema = {
   name: 'Loadout',
   properties: {
     name: 'string',
-    ship: 'string',
+    shipName: 'string',
+    shipManufacturer: 'string',
     weapons: 'Weapons[]'
   }
 };
@@ -21,7 +22,7 @@ const WeaponsSchema = {
 const databaseOptions = {
   path: 'loadouts.realm',
   schema: [LoadoutSchema, WeaponsSchema],
-  schemaVersion: 2
+  schemaVersion: 3
 };
 
 export const saveLoadout = loadout => new Promise((resolve, reject) => {
@@ -74,3 +75,5 @@ export const clearLoadouts = () => {
       });
   });
 };
+
+//clearLoadouts()

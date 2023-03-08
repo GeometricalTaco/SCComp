@@ -366,17 +366,18 @@ function ViewLoadoutsScreen({ navigation }) {
       <ScrollView>
         {loadouts.map((item) => {
           const nameKey = item.name;
-          const shipKey = item.ship.toLowerCase().split(' ').join('_');
+          const shipNameKey = item.shipName.toLowerCase().split(' ').join('_');
+          const shipManufacturerKey = item.shipManufacturer.toLowerCase().split(' ').join('_');
           try {
             return (
               <View style={styles.shipContainer} key={item.name}>
-                {/* <Image
-                  source={Icons[manufacturerKey]?.[nameKey]}
+                <Image
+                  source={Icons[shipManufacturerKey]?.[shipNameKey]}
                   style={styles.icon}
-                /> */}
+                />
                 <View style={styles.textContainer}>
                   <Text style={styles.name}>{item.name}</Text>
-                  <Text style={styles.manufacturer}>{item.ship}</Text>
+                  <Text style={styles.manufacturer}>{item.shipName}</Text>
                 </View>
               </View>
             );
@@ -478,7 +479,8 @@ function CreateLoadoutScreen({ navigation }) {
     
     const loadout = {
       name: selectedName,
-      ship: selectedShip.name,
+      shipName: selectedShip.name,
+      shipManufacturer: selectedShip.manufacturer,
       weapons: selectedWeapons,
     };
 
