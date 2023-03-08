@@ -61,6 +61,21 @@ export const getLoadouts = () => {
     });
 };
 
+export const getLoadout = (name) => {
+  return new Promise((resolve, reject) => {
+    Realm.open(databaseOptions)
+      .then(realm => {
+        const loadout = realm.objects("Loadout").find(l => l.name === name);
+        console.log(loadout)
+        resolve(loadout);
+      })
+      .catch(error => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+
 export const clearLoadouts = () => {
   return new Promise((resolve, reject) => {
     Realm.open(databaseOptions)

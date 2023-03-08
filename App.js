@@ -8,7 +8,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Picker } from '@react-native-picker/picker'
 import { getShips, addShip } from './ships_database'
 import { getWeapons } from "./weapons_database";
-import { saveLoadout, getLoadouts } from "./loadout_database";
+import { saveLoadout, getLoadouts, getLoadout } from "./loadout_database";
 
 
 
@@ -370,7 +370,7 @@ function ViewLoadoutsScreen({ navigation }) {
           const shipManufacturerKey = item.shipManufacturer.toLowerCase().split(' ').join('_');
           try {
             return (
-              <View style={styles.shipContainer} key={item.name}>
+              <Pressable style={styles.shipContainer} key={item.name} onPress={() => navigation.navigate('View Loadout', { loadout: item.name })}>
                 <Image
                   source={Icons[shipManufacturerKey]?.[shipNameKey]}
                   style={styles.icon}
@@ -379,7 +379,7 @@ function ViewLoadoutsScreen({ navigation }) {
                   <Text style={styles.name}>{item.name}</Text>
                   <Text style={styles.manufacturer}>{item.shipName}</Text>
                 </View>
-              </View>
+              </Pressable>
             );
           } catch (e) {
             console.log(e);
@@ -387,6 +387,30 @@ function ViewLoadoutsScreen({ navigation }) {
           }
         })}
       </ScrollView>
+    </View>
+  );
+}
+
+function ViewLoadoutScreen({ navigation, route }) {
+  const [loadout, setLoadout] = useState([]);
+
+  useEffect(() => {
+    const fetchLoadouts = async () => {
+      try{
+        const result  = await getLoadout(route.params.loadout);
+        console.log(result);
+        //const loadouts = Array.from(result)
+        setLoadout(result);
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchLoadouts(route.params.loadout);
+  }, [route.params]);
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>{JSON.stringify(loadout)}</Text>
     </View>
   );
 }
@@ -614,6 +638,7 @@ function App() {
 
         <Stack.Screen name="Loadout" component={LoadoutScreen} options={{title: "Loadouts", ...defaultStyles}} />
         <Stack.Screen name="View Loadouts" component={ViewLoadoutsScreen} options={{title: "View Loadouts", ...defaultStyles}} />
+        <Stack.Screen name="View Loadout" component={ViewLoadoutScreen} options={{title: "View Loadout", ...defaultStyles}} />
         <Stack.Screen name="Create Loadout" component={CreateLoadoutScreen} options={{title: "Create Loadout", ...defaultStyles}} />
 
 
@@ -675,14 +700,6 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 10,
     marginTop: 12,
-  },
-  button: {
-    margin: 10,
-    padding: 10,
-    backgroundColor: "orange",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 4,
   },
   buttonText: {
     fontSize: 18,
