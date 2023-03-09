@@ -5,10 +5,10 @@ import { Button, Text, TextInput, View, Image, Pressable, ScrollView, FlatList, 
 import SelectDropdown from "react-native-select-dropdown";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Picker } from '@react-native-picker/picker'
 import { getShips, addShip } from './ships_database'
 import { getWeapons } from "./weapons_database";
 import { saveLoadout, getLoadouts, getLoadout } from "./loadout_database";
+import { getItems } from "./items_database";
 
 
 
