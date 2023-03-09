@@ -108,7 +108,8 @@ function ShipScreen({ navigation }) {
 
 
 
-
+// Item screen main function. Identical to Ship screen, except for items instead.
+// Works in the same way.
 function ItemScreen({ navigation }) {
   const [items, setItems] = useState([]);
 
@@ -167,6 +168,8 @@ function StarMapScreen({ navigation }) {
   );
 }
 
+// Screen to direct users to either mining calculator screen, or mining guides screen.
+// Creates two pressable buttons which navigate to their respective screens.
 function MiningScreen({ navigation }) {
   return (
     <View style={styles.container}>
@@ -184,6 +187,7 @@ function MiningScreen({ navigation }) {
 
 
 // Mining Calculator variables
+// These variables are used for calculations and displaying information in the mining calculator screen
 const miningCommodities = ["Agricium", "Aluminium", "Beryl", "Bexalite", "Borase", "Copper", "Corundum", "Diamond", "Gold", "Hephaestanite", "Laranite", "Quantanium", "Quartz", "Taranite", "Titanium", "Tungsten"]
 const commodityPrices = [["Agricium", 13.75, 27.50],
                          ["Aluminium", 0.67, 1.30],
@@ -205,14 +209,14 @@ let commodityIndex = 0
 let rockVolumecSCU = 0
 let mineralVolumecSCU = 0
 
-
+// Mining calculator screen function. Takes user inputs for commodity, rock mass and mineral percentage,
+// then performs relevant calculations on the inputted data to return a collection of relevant data for the user.
 function MiningCalculatorScreen() {
   const [rockMass, setMass] = useState('');
   const [percentage, setPercentage] = useState('');
 
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.text}>Mining Calculator screen</Text> */}
       <SelectDropdown
         data = {miningCommodities}
         defaultButtonText = "Select Commodity"
@@ -312,6 +316,7 @@ function MiscGuidesScreen({ navigation }) {
   );
 }
 
+// Screen to direct users to either trading function. Contains simple pressables that navigate to the relevant screen
 function TradingScreen({ navigation }) {
   return (
     <View style={styles.container}>
@@ -341,6 +346,8 @@ function TradingCalculatorScreen({ navigation }) {
   );
 }
 
+// Screen to direct users to View Loadout screen or Create Loadout screen.
+// Contains pressables to navigate to relevant screen.
 function LoadoutScreen({ navigation }) {
   return (
     <View style={styles.container}>
@@ -354,6 +361,10 @@ function LoadoutScreen({ navigation }) {
   );
 }
 
+// View Loadout screen function. Fetches all loadouts stored in the database, sorts by manufacturer then ship name,
+// both alphabetically. Displays all loadouts in a list with the Loadout name, ship name and an icon for the ship.
+// Each loadout is an individual Pressable element, allowing users to click on loadouts to navigate to a new screen,
+// which contains more data from the loadout.
 function ViewLoadoutsScreen({ navigation }) {
   const [loadouts, setLoadouts] = useState([]);
 
@@ -378,7 +389,6 @@ function ViewLoadoutsScreen({ navigation }) {
     <View style={styles.container}>
       <ScrollView>
         {loadouts.map((item) => {
-          const nameKey = item.name;
           const shipNameKey = item.shipName.toLowerCase().split(' ').join('_');
           const shipManufacturerKey = item.shipManufacturer.toLowerCase().split(' ').join('_');
           try {
@@ -404,6 +414,7 @@ function ViewLoadoutsScreen({ navigation }) {
   );
 }
 
+// Screen connected to View Loadouts screen. Displays more data of a selected loadout.
 function ViewLoadoutScreen({ navigation, route }) {
   const [loadout, setLoadout] = useState([]);
 
@@ -428,8 +439,10 @@ function ViewLoadoutScreen({ navigation, route }) {
   );
 }
 
-
-
+// Create Loadout screen function. Fetches all ships, weapons, and loadouts from respective databases.
+// Has some basic error handling for Loadouts having a unique name, and for making sure a name has been inputted by the user.
+// Allows the user to select a ship for the loadout, then generates the correct number of dropdown selectors depending on
+// the capacity of the selected ship. Allows user to save loadout to database, then navigates back to previous menu.
 function CreateLoadoutScreen({ navigation }) {
   const [ships, setShips] = useState([]);
   const [weapons, setWeapons] = useState([]);
@@ -447,13 +460,7 @@ function CreateLoadoutScreen({ navigation }) {
   const [selectedCoolers, setSelectedCoolers] = useState(null);
   const [selectedShieldGenerators, setSelectedShieldGenerators] = useState(null);
   
-  // Use array.map function in js to create the correct amount of dropdown selectors
-  // for more complex stuff you could instead populate said array with objects instead e.g.
-  // [
-  //   { min: 4, max: 5,  }
-  // ]
 
-  
 
   useEffect(() => {
     const fetchShips = async () => {
@@ -609,7 +616,7 @@ function CreateLoadoutScreen({ navigation }) {
 
 
 
-
+//Declaration for default style for every screen in the app for uniform appearance and ease of programming.
 const defaultStyles = {
   headerTintColor: "#fff", 
   headerTitleAlign: "center", 
@@ -619,6 +626,9 @@ const defaultStyles = {
   }
 };
 
+// Base function for the app which is required for react native navigation import to work.
+// Declares each stack screen present in the app and assigns the respective function as the component for each screen,
+// as well as the "options" for each screen, mainly the title and style information for each screen.
 function App() {
   return(
     <NavigationContainer>
@@ -632,8 +642,11 @@ function App() {
       >
 
         <Stack.Screen name="Home" component={HomeScreen} options={{title: "Home", ...defaultStyles }} />
+
         <Stack.Screen name="Ships" component={ShipScreen} options={{title: "Ships", ...defaultStyles}} />
+
         <Stack.Screen name="Items" component={ItemScreen} options={{title: "Items", ...defaultStyles}} />
+
         <Stack.Screen name="Star Map" component={StarMapScreen} options={{title: "Star Map", ...defaultStyles}} />
 
         <Stack.Screen name="Mining" component={MiningScreen} options={{title: "Mining", ...defaultStyles}} />
@@ -664,6 +677,7 @@ function App() {
 export default App;
 
 
+// Declaration of all stylesheet styles used throughout the app by components
 const styles = StyleSheet.create({
   container: {
     flex: 1,
