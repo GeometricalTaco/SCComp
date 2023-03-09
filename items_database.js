@@ -5,9 +5,9 @@ import Realm from 'realm';
 const ItemSchema = {
   name: 'Item',
   properties: {
-    type: 'string',
     name: 'string',
     manufacturer: 'string',
+    type: 'string',
   }
 };
 
@@ -16,7 +16,7 @@ const ItemSchema = {
 const databaseOptions = {
   path: 'items.realm',
   schema: [ItemSchema],
-  schemaVersion: 0
+  schemaVersion: 1
 };
 
 export const addItem = newItem => new Promise((resolve, reject) => {
@@ -69,3 +69,7 @@ export const clearItems = () => {
       });
   });
 };
+
+
+//clearItems()
+//addItem({name: "C54 SMG", manufacturer:"Gemini", type:"SMG"})
