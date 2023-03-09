@@ -9,47 +9,16 @@ import { getShips, addShip } from './ships_database'
 import { getWeapons } from "./weapons_database";
 import { saveLoadout, getLoadouts, getLoadout } from "./loadout_database";
 import { getItems } from "./items_database";
-
-
-
-// async function updateRealmShips() {
-//   const realm = await Realm.open({
-//     path: "./realm-files/ship_database",
-//     schema: [ShipSchema],
-//   });
-
-//   realm.write(() => {
-//     ships = realm.create("Ship", { name: "Avenger Titan", manufacturer: "Aegis Dynamics", weapons: ["placeholder"], missileRacks: ["placeholder"], missiles: ["placeholder"], powerPlants: ["placeholder"], coolers: ["placeholder"], shieldGenerators: ["placeholder"]})
-//   })
-// }
-
-// async function getShips() {
-//   const realm = await Realm.open({
-//     path: "./realm-files/ship_database",
-//     schema: [ShipSchema],
-//   });
-
-//   const getShips = () => {
-//     return realm.objects("Ship").sorted("manufacturer, name");
-//   };
-
-// }
-
-
-
-// updateRealmShips()
+import Icons from './assets/icons';
 
 
 const Stack = createNativeStackNavigator();
 
-import Icons from './assets/icons';
 
-//1A1B1E
-
+// Home Screen function containing buttons to the main function menus
 function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.text}>Home Screen</Text> */}
 
       <Pressable style={styles.buttons} onPress={() => navigation.navigate('Ships')}>
         <Text style={styles.text}>Ships</Text>
@@ -83,6 +52,8 @@ function HomeScreen({ navigation }) {
 }
 
 
+// Ship screen main function. Displays a list of all the ships in the database, 
+// with the appropriate icon, name of the ship, and manufacturer of the ship
 function ShipScreen({ navigation }) {
   const [ships, setShips] = useState([]);
 
@@ -139,9 +110,51 @@ function ShipScreen({ navigation }) {
 
 
 function ItemScreen({ navigation }) {
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try{
+        const result  = await getItems();
+        console.log(result);
+        const items = Array.from(result)
+        setItems(items);
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchItems();
+  }, []);
+
+  if (!items.length) {
+    return (<Text>No items found</Text>)
+  }
   return (
     <View style={styles.container}>
-      <Text>Items screen</Text>
+      <ScrollView>
+        {items.map((item) => {
+          // const manufacturerKey = item.manufacturer.toLowerCase().split(' ').join('_');
+          // const nameKey = item.name.toLowerCase().split(' ').join('_');
+          try {
+            return (
+              <View style={styles.shipContainer} key={item.name}>
+                {/* <Image
+                  source={Icons[manufacturerKey]?.[nameKey]}
+                  style={styles.icon}
+                /> */}
+                <View style={styles.textContainer}>
+                  <Text style={styles.name}>{item.name}</Text>
+                  <Text style={styles.manufacturer}>{item.manufacturer}</Text>
+                </View>
+              </View>
+            );
+          } catch (e) {
+            console.log(e);
+            //console.warn(`Could not find image for item ${item.name}`);
+            return null;
+          }
+        })}
+      </ScrollView>
     </View>
   );
 }
