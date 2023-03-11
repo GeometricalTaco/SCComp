@@ -97,3 +97,4 @@ export const clearShips = () => {
 
 // Add some ships to the database
 //addShip({ name: "Avenger Titan", manufacturer: "Aegis Dynamics", availableWeapons: [{ size: 3, amount: 2}, { size: 4, amount: 1}] });
+//addShip({ name: "Constellation Aquila", manufacturer: "Roberts Space Industries", availableWeapons: [{ size: 2, amount: 2}, { size: 5, amount: 4}] });

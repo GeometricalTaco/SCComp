@@ -667,7 +667,7 @@ function App() {
         <Stack.Screen name="View Loadout" component={ViewLoadoutScreen} options={{title: "View Loadout", ...defaultStyles}} />
         <Stack.Screen name="Create Loadout" component={CreateLoadoutScreen} options={{title: "Create Loadout", ...defaultStyles}} />
 
-
+        
       </Stack.Navigator>
     </NavigationContainer>
   )

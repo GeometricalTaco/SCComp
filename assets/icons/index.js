@@ -3,6 +3,7 @@ import gladius from './aegis_dynamics/gladius.png';
 import sabre from './aegis_dynamics/sabre.png';
 import cutlass_black from './drake_interplanetary/cutlass_black.png';
 import oj300i from './origin_jumpworks/300i.png';
+import constellation_aquila from './roberts_space_industries/constellation_aquila.png'
 
 export default {
     aegis_dynamics: {
@@ -17,5 +18,8 @@ export default {
     },
     origin_jumpworks: {
         '300i': oj300i,
+    },
+    roberts_space_industries: {
+        constellation_aquila,
     }
 }

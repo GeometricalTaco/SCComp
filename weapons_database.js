@@ -74,6 +74,8 @@ export const clearWeapons = () => {
   });
 };
 
+//addWeapon({ name: "M6A Cannon", manufacturer: "Behring Applied Technology", size: 4, type: "Laser Cannon"})
+
 //clearWeapons();
 
 // addWeapon({ name: "Mantis GT-220", manufacturer: "Gallensob Tactical Systems", size: 3, type: "Ballistic Gattling"})
