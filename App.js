@@ -5,7 +5,7 @@ import { Button, Text, TextInput, View, Image, Pressable, ScrollView, FlatList, 
 import SelectDropdown from "react-native-select-dropdown";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { getShips, addShip } from './ships_database'
+import { getShips, getShip } from './ships_database'
 import { getWeapons } from "./weapons_database";
 import { saveLoadout, getLoadouts, getLoadout } from "./loadout_database";
 import { getItems } from "./items_database";
@@ -82,7 +82,7 @@ function ShipsScreen({ navigation }) {
           const nameKey = item.name.toLowerCase().split(' ').join('_');
           try {
             return (
-              <View style={styles.shipContainer} key={item.name}>
+              <Pressable style={styles.shipContainer} key={item.name} onPress={() => navigation.navigate('View Ship', { ship: item.name })}>
                 <Image
                   source={Icons[manufacturerKey]?.[nameKey]}
                   style={styles.icon}
@@ -91,7 +91,7 @@ function ShipsScreen({ navigation }) {
                   <Text style={styles.name}>{item.name}</Text>
                   <Text style={styles.manufacturer}>{item.manufacturer}</Text>
                 </View>
-              </View>
+              </Pressable>
             );
           } catch (e) {
             console.log(e);
@@ -105,6 +105,51 @@ function ShipsScreen({ navigation }) {
 }
 
 
+function ViewShipScreen({ navigation, route }) {
+  const [ship, setShip] = useState(null);
+
+  useEffect(() => {
+    const fetchShip = async () => {
+      try{
+        const result  = await getShip(route.params.ship);
+        console.log(result);
+        //const loadouts = Array.from(result)
+        setShip(result);
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchShip(route.params.ship);
+  }, [route.params]);
+
+  console.log("Ship console log")
+  console.log(ship)
+
+
+  if (!ship) {
+    return (
+      <View>
+        <Text>some text or somthing to say it isn't loaded</Text>
+      </View>
+    )
+  } else {
+    const shipNameKey = ship.name.toLowerCase().split(' ').join('_');
+    const shipManufacturerKey = ship.manufacturer.toLowerCase().split(' ').join('_');
+    return (
+      <View style={styles.shipContainer} key={ship.name}>
+        <Image
+          source={Icons[shipManufacturerKey]?.[shipNameKey]}
+          style={styles.topImage}
+        />
+        <View style={styles.container}>
+          <Text style={styles.name}>{ship.name}</Text>
+          <Text style={styles.name}>{ship.shipName}</Text>
+          <Text style={styles.manufacturer}>{ship.shipManufacturer}</Text>
+        </View>
+      </View>
+    );
+  }
+}
 
 
 
@@ -667,6 +712,7 @@ function App() {
         <Stack.Screen name="Home" component={HomeScreen} options={{title: "Home", ...defaultStyles }} />
 
         <Stack.Screen name="Ships" component={ShipsScreen} options={{title: "Ships", ...defaultStyles}} />
+        <Stack.Screen name="View Ship" component={ViewShipScreen} options={{title: "View Ship", ...defaultStyles}} />
 
         <Stack.Screen name="Items" component={ItemsScreen} options={{title: "Items", ...defaultStyles}} />
 

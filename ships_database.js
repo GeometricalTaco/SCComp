@@ -75,6 +75,21 @@ export const getShips = () => {
     });
 };
 
+export const getShip = (name) => {
+  return new Promise((resolve, reject) => {
+    Realm.open(databaseOptions)
+      .then(realm => {
+        const loadout = realm.objects("Ship").find(s => s.name === name);
+        console.log(loadout)
+        resolve(loadout);
+      })
+      .catch(error => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+
 export const clearShips = () => {
   return new Promise((resolve, reject) => {
     Realm.open(databaseOptions)
