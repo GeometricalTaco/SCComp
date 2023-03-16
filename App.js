@@ -54,7 +54,7 @@ function HomeScreen({ navigation }) {
 
 // Ship screen main function. Displays a list of all the ships in the database, 
 // with the appropriate icon, name of the ship, and manufacturer of the ship
-function ShipScreen({ navigation }) {
+function ShipsScreen({ navigation }) {
   const [ships, setShips] = useState([]);
 
   useEffect(() => {
@@ -110,7 +110,7 @@ function ShipScreen({ navigation }) {
 
 // Item screen main function. Identical to Ship screen, except for items instead.
 // Works in the same way.
-function ItemScreen({ navigation }) {
+function ItemsScreen({ navigation }) {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
@@ -416,10 +416,10 @@ function ViewLoadoutsScreen({ navigation }) {
 
 // Screen connected to View Loadouts screen. Displays more data of a selected loadout.
 function ViewLoadoutScreen({ navigation, route }) {
-  const [loadout, setLoadout] = useState([]);
+  const [loadout, setLoadout] = useState(null);
 
   useEffect(() => {
-    const fetchLoadouts = async () => {
+    const fetchLoadout = async () => {
       try{
         const result  = await getLoadout(route.params.loadout);
         console.log(result);
@@ -429,14 +429,37 @@ function ViewLoadoutScreen({ navigation, route }) {
         console.error(error)
       }
     }
-    fetchLoadouts(route.params.loadout);
+    fetchLoadout(route.params.loadout);
   }, [route.params]);
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>{JSON.stringify(loadout)}</Text>
-    </View>
-  );
+  console.log("Loadout console log")
+  console.log(loadout)
+
+
+  if (!loadout) {
+    return (
+      <View>
+        <Text>some text or somthing to say it isn't loaded</Text>
+      </View>
+    )
+  } else {
+    console.log(loadout)
+    const shipNameKey = loadout.shipName.toLowerCase().split(' ').join('_');
+    const shipManufacturerKey = loadout.shipManufacturer.toLowerCase().split(' ').join('_');
+    return (
+      <View style={styles.shipContainer} key={loadout.name}>
+        <Image
+          source={Icons[shipManufacturerKey]?.[shipNameKey]}
+          style={styles.topImage}
+        />
+        <View style={styles.container}>
+          <Text style={styles.name}>{loadout.name}</Text>
+          <Text style={styles.name}>{loadout.shipName}</Text>
+          <Text style={styles.manufacturer}>{loadout.shipManufacturer}</Text>
+        </View>
+      </View>
+    );
+  }
 }
 
 // Create Loadout screen function. Fetches all ships, weapons, and loadouts from respective databases.
@@ -643,9 +666,9 @@ function App() {
 
         <Stack.Screen name="Home" component={HomeScreen} options={{title: "Home", ...defaultStyles }} />
 
-        <Stack.Screen name="Ships" component={ShipScreen} options={{title: "Ships", ...defaultStyles}} />
+        <Stack.Screen name="Ships" component={ShipsScreen} options={{title: "Ships", ...defaultStyles}} />
 
-        <Stack.Screen name="Items" component={ItemScreen} options={{title: "Items", ...defaultStyles}} />
+        <Stack.Screen name="Items" component={ItemsScreen} options={{title: "Items", ...defaultStyles}} />
 
         <Stack.Screen name="Star Map" component={StarMapScreen} options={{title: "Star Map", ...defaultStyles}} />
 
@@ -737,9 +760,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 16,
   },
+  loadoutContainer: {
+    alignContent: "center",
+    padding: 16,
+  },
   icon: {
     width: 64,
     height: 64,
+    marginRight: 16
+  },
+  topImage: {
+    width: 200,
+    height: 150,
     marginRight: 16
   },
   textContainer: {
