@@ -82,14 +82,14 @@ function ShipsScreen({ navigation }) {
           const nameKey = item.name.toLowerCase().split(' ').join('_');
           try {
             return (
-              <Pressable style={styles.shipContainer} key={item.name} onPress={() => navigation.navigate('View Ship', { ship: item.name })}>
+              <Pressable style={styles.shipListContainer} key={item.name} onPress={() => navigation.navigate('View Ship', { ship: item.name })}>
                 <Image
                   source={Icons[manufacturerKey]?.[nameKey]}
                   style={styles.icon}
                 />
                 <View style={styles.textContainer}>
-                  <Text style={styles.name}>{item.name}</Text>
-                  <Text style={styles.manufacturer}>{item.manufacturer}</Text>
+                  <Text style={styles.shipName}>{item.name}</Text>
+                  <Text style={styles.shipManufacturer}>{item.manufacturer}</Text>
                 </View>
               </Pressable>
             );
@@ -105,6 +105,7 @@ function ShipsScreen({ navigation }) {
 }
 
 
+// Screen connected to ShipsScreen, shows data around specific 
 function ViewShipScreen({ navigation, route }) {
   const [ship, setShip] = useState(null);
 
@@ -141,11 +142,9 @@ function ViewShipScreen({ navigation, route }) {
           source={Icons[shipManufacturerKey]?.[shipNameKey]}
           style={styles.topImage}
         />
-        <View style={styles.container}>
-          <Text style={styles.name}>{ship.name}</Text>
-          <Text style={styles.name}>{ship.shipName}</Text>
-          <Text style={styles.manufacturer}>{ship.shipManufacturer}</Text>
-        </View>
+          <Text style={styles.shipName}>{ship.name}</Text>
+          <Text style={styles.shipManufacturer}>{ship.manufacturer}</Text>
+          <Text style={styles.text}>{ship.shipDescription}</Text>
       </View>
     );
   }
@@ -438,14 +437,14 @@ function ViewLoadoutsScreen({ navigation }) {
           const shipManufacturerKey = item.shipManufacturer.toLowerCase().split(' ').join('_');
           try {
             return (
-              <Pressable style={styles.shipContainer} key={item.name} onPress={() => navigation.navigate('View Loadout', { loadout: item.name })}>
+              <Pressable style={styles.shipListContainer} key={item.name} onPress={() => navigation.navigate('View Loadout', { loadout: item.name })}>
                 <Image
                   source={Icons[shipManufacturerKey]?.[shipNameKey]}
                   style={styles.icon}
                 />
                 <View style={styles.textContainer}>
-                  <Text style={styles.name}>{item.name}</Text>
-                  <Text style={styles.manufacturer}>{item.shipName}</Text>
+                  <Text style={styles.shipName}>{item.name}</Text>
+                  <Text style={styles.shipManufacturer}>{item.shipName}</Text>
                 </View>
               </Pressable>
             );
@@ -498,9 +497,9 @@ function ViewLoadoutScreen({ navigation, route }) {
           style={styles.topImage}
         />
         <View style={styles.container}>
-          <Text style={styles.name}>{loadout.name}</Text>
-          <Text style={styles.name}>{loadout.shipName}</Text>
-          <Text style={styles.manufacturer}>{loadout.shipManufacturer}</Text>
+          <Text style={styles.shipManufacturer}>{loadout.name}</Text>
+          <Text style={styles.shipName}>{loadout.shipName}</Text>
+          <Text style={styles.shipManufacturer}>{loadout.shipManufacturer}</Text>
         </View>
       </View>
     );
@@ -750,10 +749,8 @@ export default App;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //justifyContent: "space-between",
     backgroundColor: "#1A1B1E",
     padding: 20,
-    //margin: 10,
   },
   text: {
     fontSize: 19,
@@ -802,8 +799,14 @@ const styles = StyleSheet.create({
     color: "#444",
   },
   shipContainer: {
-    flexDirection: "row",
     alignItems: "center",
+    flex: 1,
+    backgroundColor: "#1A1B1E",
+    padding: 20,
+  },
+  shipListContainer: {
+    alignItems: "center",
+    flexDirection: "row",
     padding: 16,
   },
   loadoutContainer: {
@@ -816,18 +819,19 @@ const styles = StyleSheet.create({
     marginRight: 16
   },
   topImage: {
-    width: 200,
-    height: 150,
-    marginRight: 16
+    flex: 0.3,
+    marginRight: 15,
+    marginLeft: 15,
+    marginBottom: 16
   },
   textContainer: {
     marginLeft: 10
   },
-  manufacturer: {
+  shipManufacturer: {
     fontWeight: "bold",
     color: "white",
   },
-  name: {
+  shipName: {
     fontSize: 16,
     color: "white",
   },

@@ -7,6 +7,7 @@ const ShipSchema = {
   properties: {
     name: 'string',
     manufacturer: 'string',
+    shipDescription: 'string',
     availableWeapons: 'WeaponSlots[]'
     //weapons: 'Weapon[]',
     //missileRacks: 'MissileRack[]',
@@ -33,7 +34,7 @@ const WeaponSlotsSchema = {
 const databaseOptions = {
   path: 'ships.realm',
   schema: [ShipSchema, WeaponSlotsSchema],
-  schemaVersion: 1
+  schemaVersion: 2
 };
 
 export const addShip = newShip => new Promise((resolve, reject) => {
@@ -111,5 +112,5 @@ export const clearShips = () => {
 // addShip({ name: "Avenger Titan", manufacturer: "Aegis Dynamics", weapons: ["placeholder"], missileRacks: ["placeholder"], missiles: ["placeholder"], powerPlants: ["placeholder"], coolers: ["placeholder"], shieldGenerators: ["placeholder"]});
 
 // Add some ships to the database
-//addShip({ name: "Avenger Titan", manufacturer: "Aegis Dynamics", availableWeapons: [{ size: 3, amount: 2}, { size: 4, amount: 1}] });
-//addShip({ name: "Constellation Aquila", manufacturer: "Roberts Space Industries", availableWeapons: [{ size: 2, amount: 2}, { size: 5, amount: 4}] });
+//addShip({ name: "Avenger Titan", manufacturer: "Aegis Dynamics", shipDescription: "The Aegis Avenger Titan is the base variant of the Avenger. With the extra cargo space and the Avenger's tried and true combat abilities, the Titan is a light cargo hauler that's more than capable of handling itself in a fight.", availableWeapons: [{ size: 3, amount: 2}, { size: 4, amount: 1}] });
+//addShip({ name: "Constellation Aquila", manufacturer: "Roberts Space Industries", shipDescription: "Evan Gill", availableWeapons: [{ size: 2, amount: 2}, { size: 5, amount: 4}] });
