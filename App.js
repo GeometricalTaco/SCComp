@@ -97,7 +97,6 @@ function ShipsScreen({ navigation }) {
 
   useEffect(() => {
     setSortedShips(sortData(ships, sortType));
-    console.log("does this world", sortedShips)
   }, [ships, sortType]);
 
 
