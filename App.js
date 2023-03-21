@@ -85,7 +85,6 @@ function ShipsScreen({ navigation }) {
     const fetchShips = async () => {
       try{
         const result  = await getShips();
-        //console.log(result);
         const ships = Array.from(result)
         setShips(ships);
       } catch (error) {
@@ -226,14 +225,14 @@ function ItemsScreen({ navigation }) {
           // const nameKey = item.name.toLowerCase().split(' ').join('_');
           try {
             return (
-              <View style={styles.shipContainer} key={item.name}>
+              <View style={styles.shipListContainer} key={item.name}>
                 {/* <Image
                   source={Icons[manufacturerKey]?.[nameKey]}
                   style={styles.icon}
                 /> */}
                 <View style={styles.textContainer}>
-                  <Text style={styles.name}>{item.name}</Text>
-                  <Text style={styles.manufacturer}>{item.manufacturer}</Text>
+                  <Text style={styles.shipName}>{item.name}</Text>
+                  <Text style={styles.shipManufacturer}>{item.manufacturer}</Text>
                 </View>
               </View>
             );
@@ -544,6 +543,21 @@ function ViewLoadoutScreen({ navigation, route }) {
           <Text style={styles.shipManufacturer}>{loadout.name}</Text>
           <Text style={styles.shipName}>{loadout.shipName}</Text>
           <Text style={styles.shipManufacturer}>{loadout.shipManufacturer}</Text>
+          <Text style={styles.text}>Weapons</Text>
+          {loadout.weapons.map((item) => {
+          try {
+            return (
+              <View>
+                <Text style={styles.text}>{item.name}</Text>
+                <Text style={styles.text}>{item.size}</Text>
+                <Text style={styles.text}>{item.slot}</Text>
+              </View>
+            );
+          } catch (e) {
+            console.log(e);
+            return null;
+          }
+        })}
         </View>
       </View>
     );
