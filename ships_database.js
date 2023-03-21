@@ -66,7 +66,6 @@ export const getShips = () => {
             "manufacturer", 
             "name"
           ]));
-          console.log(ships)
           resolve(ships);
         })
         .catch(error => {

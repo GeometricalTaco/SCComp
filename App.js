@@ -14,6 +14,27 @@ import Icons from './assets/icons';
 
 const Stack = createNativeStackNavigator();
 
+// Function for sorting data
+function sortData(data, sortBy, reversed = false) { // reversed is a boolean
+  if (!sortBy) return data;
+
+  return [...data].sort((a, b) => {
+    if (reversed) {
+      if (typeof (b[sortBy]) === "number") {
+        return Number(b[sortBy]) - Number(a[sortBy]);
+      } else {
+        return b[sortBy].toString().localeCompare(a[sortBy].toString());
+      };
+    };
+
+    if (typeof (a[sortBy]) === "number") {
+      return Number(a[sortBy]) - Number(b[sortBy]);
+    } else {
+      return a[sortBy].toString().localeCompare(b[sortBy].toString());
+    };
+  });
+};
+
 
 // Home Screen function containing buttons to the main function menus
 function HomeScreen({ navigation }) {
@@ -56,12 +77,15 @@ function HomeScreen({ navigation }) {
 // with the appropriate icon, name of the ship, and manufacturer of the ship
 function ShipsScreen({ navigation }) {
   const [ships, setShips] = useState([]);
+  const [sortedShips, setSortedShips] = useState([]);
+  const [sortType, setSortType] = useState("name")
+  const sortTypes = ["name", "manufacturer"]
 
   useEffect(() => {
     const fetchShips = async () => {
       try{
         const result  = await getShips();
-        console.log(result);
+        //console.log(result);
         const ships = Array.from(result)
         setShips(ships);
       } catch (error) {
@@ -71,27 +95,48 @@ function ShipsScreen({ navigation }) {
     fetchShips();
   }, []);
 
+  useEffect(() => {
+    setSortedShips(sortData(ships, sortType));
+    console.log("does this world", sortedShips)
+  }, [ships, sortType]);
+
+
   if (!ships.length) {
     return (<Text>No ships found</Text>)
   }
   return (
     <View style={styles.container}>
       <ScrollView>
-        {ships.map((item) => {
+        <SelectDropdown
+          data = {sortTypes}
+          defaultButtonText = "Select Sort Type"
+          onSelect={(selectedItem, index) => {
+            setSortType(sortTypes[index])
+          }}
+          buttonTextAfterSelection={(selectedItem, index) => {
+            return selectedItem
+          }}
+          rowTextForSelection={(item, index) => {
+            return item
+          }}
+        />
+        {sortedShips.map((item) => {
           const manufacturerKey = item.manufacturer.toLowerCase().split(' ').join('_');
           const nameKey = item.name.toLowerCase().split(' ').join('_');
           try {
             return (
-              <Pressable style={styles.shipListContainer} key={item.name} onPress={() => navigation.navigate('View Ship', { ship: item.name })}>
-                <Image
-                  source={Icons[manufacturerKey]?.[nameKey]}
-                  style={styles.icon}
-                />
-                <View style={styles.textContainer}>
-                  <Text style={styles.shipName}>{item.name}</Text>
-                  <Text style={styles.shipManufacturer}>{item.manufacturer}</Text>
-                </View>
-              </Pressable>
+              <View>
+                <Pressable style={styles.shipListContainer} key={item.name} onPress={() => navigation.navigate('View Ship', { ship: item.name })}>
+                  <Image
+                    source={Icons[manufacturerKey]?.[nameKey]}
+                    style={styles.icon}
+                  />
+                  <View style={styles.textContainer}>
+                    <Text style={styles.shipName}>{item.name}</Text>
+                    <Text style={styles.shipManufacturer}>{item.manufacturer}</Text>
+                  </View>
+                </Pressable>
+              </View>
             );
           } catch (e) {
             console.log(e);
