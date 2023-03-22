@@ -123,7 +123,7 @@ function ShipsScreen({ navigation }) {
           const nameKey = item.name.toLowerCase().split(' ').join('_');
           try {
             return (
-              <View>
+              <View key={item.name}>
                 <Pressable style={styles.shipListContainer} key={item.name} onPress={() => navigation.navigate('View Ship', { ship: item.name })}>
                   <Image
                     source={Icons[manufacturerKey]?.[nameKey]}
@@ -547,7 +547,7 @@ function ViewLoadoutScreen({ navigation, route }) {
           {loadout.weapons.map((item) => {
           try {
             return (
-              <View>
+              <View key={item.name}> 
                 <Text style={styles.text}>{item.name}</Text>
                 <Text style={styles.text}>{item.size}</Text>
                 <Text style={styles.text}>{item.slot}</Text>

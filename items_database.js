@@ -1,7 +1,5 @@
 import Realm from 'realm';
 
-
-
 const ItemSchema = {
   name: 'Item',
   properties: {
@@ -10,7 +8,6 @@ const ItemSchema = {
     type: 'string',
   }
 };
-
 
 
 const databaseOptions = {
