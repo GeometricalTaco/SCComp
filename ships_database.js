@@ -105,6 +105,25 @@ export const clearShips = () => {
   });
 };
 
+export const deleteShip = (ship) => {
+  return new Promise((resolve, reject) => {
+    Realm.open(databaseOptions)
+      .then(realm => {
+        realm.write(() => {
+          realm.delete(ship);
+          ship = null;
+        })
+      })
+      .catch(error => {
+        console.log(error);
+        reject(error)
+      });
+  });
+};
+
+
+//deleteShip("Gladius")
+
 //clearShips();
 
 
@@ -113,4 +132,4 @@ export const clearShips = () => {
 // Add some ships to the database
 //addShip({ name: "Avenger Titan", manufacturer: "Aegis Dynamics", shipDescription: "The Aegis Avenger Titan is the base variant of the Avenger. With the extra cargo space and the Avenger's tried and true combat abilities, the Titan is a light cargo hauler that's more than capable of handling itself in a fight.", availableWeapons: [{ size: 3, amount: 2}, { size: 4, amount: 1}] });
 //addShip({ name: "Constellation Aquila", manufacturer: "Roberts Space Industries", shipDescription: "Evan Gill", availableWeapons: [{ size: 2, amount: 2}, { size: 5, amount: 4}] });
-//addShip({ name: "Gladius", manufacturer: "Aegis Dynamics", shipDescription: "Evan Gill?", availableWeapons: [{ size: 3, amount: 2}] });
+//addShip({ name: "Gladius", manufacturer: "Aegis Dynamics", shipDescription: "Evan Gill?", availableWeapons: [{ size: 3, amount: 3}] });

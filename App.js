@@ -108,6 +108,7 @@ function ShipsScreen({ navigation }) {
         <SelectDropdown
           data = {sortTypes}
           defaultButtonText = "Select Sort Type"
+          
           onSelect={(selectedItem, index) => {
             setSortType(sortTypes[index])
           }}
@@ -148,7 +149,7 @@ function ShipsScreen({ navigation }) {
 }
 
 
-// Screen connected to ShipsScreen, shows data around specific 
+// Screen connected to ShipsScreen, shows data around specific ships
 function ViewShipScreen({ navigation, route }) {
   const [ship, setShip] = useState(null);
 
@@ -548,9 +549,9 @@ function ViewLoadoutScreen({ navigation, route }) {
           try {
             return (
               <View key={item.name}> 
+                <Text style={styles.text}>Weapon slot: {item.slot + 1}</Text>
                 <Text style={styles.text}>{item.name}</Text>
                 <Text style={styles.text}>{item.size}</Text>
-                <Text style={styles.text}>{item.slot}</Text>
               </View>
             );
           } catch (e) {
@@ -671,8 +672,10 @@ function CreateLoadoutScreen({ navigation }) {
         style={styles.input}
         onChangeText={text => setSelectedName(text)}
         value={selectedName}
+        placeholder="Loadout Name"
       />
       <SelectDropdown
+        buttonStyle={styles.selectDropdownstyle}
         data={ships}
         defaultButtonText={selectedShip}
         onSelect={(selectedItem, index) => {
@@ -700,7 +703,6 @@ function CreateLoadoutScreen({ navigation }) {
                             .filter(weapon => weapon.size === weaponSlot.size || weapon.size === (weaponSlot.size - 1))
                             .map(weapon => weapon.name)}
                           onSelect={(selectedItem, index) => {
-                            //console.log("select weapon", selectedItem, weaponSlot.size, slot);
                             // Get rid of the weapon that is currently occupying this slot
                             const weapons = [...selectedWeapons].filter(w => !(w.size === weaponSlot.size && w.slot === slot));
                             // Add the weapon
@@ -899,5 +901,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 10,
     paddingHorizontal: 10
-  }
+  },
+  selectDropdownstyle: {
+    height: 60,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+    backgroundColor: "white",
+    borderColor: "black"
+  },
 });
