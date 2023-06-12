@@ -69,4 +69,10 @@ export const clearItems = () => {
 
 
 //clearItems()
-//addItem({name: "C54 SMG", manufacturer:"Gemini", type:"SMG"})
+//addItem({name: "C54 SMG", manufacturer: "Gemini", type: "SMG"})
+//addItem({name: "MedPen (Hemozal)", manufacturer: "CureLife", type: "Supplies"})
+//addItem({name: "P4-AR Rifle", manufacturer: "Behring Applied Technology", type: "Assault Rifle"})
+//addItem({name: "Coda Pistol", manufacturer: "Kastak Arms", type: "Pistol"})
+//addItem({name: "Pyro RYT Multi-Tool", manufacturer: "Greycat Industrial", type: "Gadget"})
+//addItem({name: "Arclight Pistol", manufacturer: "Klaus and Werner", type: "Pistol"})
+//addItem({name: "MacFlex Backpack", manufacturer: "Roberts Space Industries", type: "Light Backpack"})

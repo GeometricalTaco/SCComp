@@ -105,24 +105,29 @@ export const clearShips = () => {
   });
 };
 
-export const deleteShip = (ship) => {
+export const deleteShip = (name) => {
   return new Promise((resolve, reject) => {
     Realm.open(databaseOptions)
       .then(realm => {
         realm.write(() => {
-          realm.delete(ship);
-          ship = null;
-        })
+          const shipToDelete = realm.objects('Ship').filtered(`name = "${name}"`)[0];
+          if (shipToDelete) {
+            realm.delete(shipToDelete);
+            resolve();
+          } else {
+            reject(new Error(`Ship with name "${name}" not found`));
+          }
+        });
       })
       .catch(error => {
         console.log(error);
-        reject(error)
+        reject(error);
       });
   });
 };
 
 
-//deleteShip("Gladius")
+//deleteShip("Carrack")
 
 //clearShips();
 
@@ -133,3 +138,12 @@ export const deleteShip = (ship) => {
 //addShip({ name: "Avenger Titan", manufacturer: "Aegis Dynamics", shipDescription: "The Aegis Avenger Titan is the base variant of the Avenger. With the extra cargo space and the Avenger's tried and true combat abilities, the Titan is a light cargo hauler that's more than capable of handling itself in a fight.", availableWeapons: [{ size: 3, amount: 2}, { size: 4, amount: 1}] });
 //addShip({ name: "Constellation Aquila", manufacturer: "Roberts Space Industries", shipDescription: "Evan Gill", availableWeapons: [{ size: 2, amount: 2}, { size: 5, amount: 4}] });
 //addShip({ name: "Gladius", manufacturer: "Aegis Dynamics", shipDescription: "Evan Gill?", availableWeapons: [{ size: 3, amount: 3}] });
+
+//addShip({ name: "Sabre", manufacturer: "Aegis Dynamics", shipDescription: "Evan Gill?", availableWeapons: [{ size: 3, amount: 4}] });
+//addShip({ name: "Carrack", manufacturer: "Anvil Aerospace", shipDescription: "Evan Gill.", availableWeapons: [{ size: 4, amount: 8}] });
+//addShip({ name: "890 Jump", manufacturer: "Origin Jumpworks", shipDescription: "Evan Gill?", availableWeapons: [{ size: 3, amount: 4}, {size: 4, amount: 4}] });
+//addShip({ name: "FreeLancer", manufacturer: "MISC", shipDescription: "Evan Gill?", availableWeapons: [{ size: 3, amount: 4}] });
+//addShip({ name: "Caterpillar", manufacturer: "Drake Interplanetary", shipDescription: "Evan Gill?", availableWeapons: [{ size: 3, amount: 2}, {size: 2, amount: 2}, {size: 4, amount: 4}] });
+//addShip({ name: "Mercury Star Runner", manufacturer: "Crusader Industries", shipDescription: "Evan Gill?", availableWeapons: [{ size: 3, amount: 6}] });
+//addShip({ name: "Talon", manufacturer: "Esperia", shipDescription: "Evan Gill?", availableWeapons: [{ size: 4, amount: 2}] });
+//addShip({ name: "Buccaneer", manufacturer: "Drake Interplanetary", shipDescription: "Evan Gill?", availableWeapons: [{ size: 4, amount: 1}, {size: 3, amount: 2}, {size: 1, amount: 2}] });

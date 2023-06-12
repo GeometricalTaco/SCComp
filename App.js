@@ -15,24 +15,37 @@ import Icons from './assets/icons';
 const Stack = createNativeStackNavigator();
 
 // Function for sorting data
-function sortData(data, sortBy, reversed = false) { // reversed is a boolean
-  if (!sortBy) return data;
+const searchableTerms = ["name", "manufacturer"];
+function filterData(data, search) {
+  const query = search.toLowerCase().trim();
+  return data.filter((item) =>
+    searchableTerms.some((key) => item[key].toString().toLowerCase().includes(query))
+  );
+};
 
-  return [...data].sort((a, b) => {
-    if (reversed) {
-      if (typeof (b[sortBy]) === "number") {
-        return Number(b[sortBy]) - Number(a[sortBy]);
-      } else {
-        return b[sortBy].toString().localeCompare(a[sortBy].toString());
+function sortData(data, sortBy, search, reversed = false) {
+  if (!sortBy) {
+     return filterData(data, search);
+  }
+
+  return filterData(
+    [...data].sort((a, b) => {
+      if (reversed) {
+        if (typeof (b[sortBy]) === "number") {
+          return Number(b[sortBy]) - Number(a[sortBy]);
+        } else {
+          return b[sortBy].toString().localeCompare(a[sortBy].toString());
+        };
       };
-    };
 
-    if (typeof (a[sortBy]) === "number") {
-      return Number(a[sortBy]) - Number(b[sortBy]);
-    } else {
-      return a[sortBy].toString().localeCompare(b[sortBy].toString());
-    };
-  });
+      if (typeof (a[sortBy]) === "number") {
+        return Number(a[sortBy]) - Number(b[sortBy]);
+      } else {
+        return a[sortBy].toString().localeCompare(b[sortBy].toString());
+      };
+    }),
+    search
+  );
 };
 
 
@@ -80,6 +93,7 @@ function ShipsScreen({ navigation }) {
   const [sortedShips, setSortedShips] = useState([]);
   const [sortType, setSortType] = useState("name")
   const sortTypes = ["name", "manufacturer"]
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const fetchShips = async () => {
@@ -95,11 +109,11 @@ function ShipsScreen({ navigation }) {
   }, []);
 
   useEffect(() => {
-    setSortedShips(sortData(ships, sortType));
-  }, [ships, sortType]);
+    setSortedShips(sortData(ships, sortType, search));
+  }, [ships, sortType, search]);
 
 
-  if (!ships.length) {
+  if (!sortedShips.length) {
     return (<Text>No ships found</Text>)
   }
   return (
@@ -118,6 +132,12 @@ function ShipsScreen({ navigation }) {
           rowTextForSelection={(item, index) => {
             return item
           }}
+        />
+        <TextInput
+        style={styles.input}
+        onChangeText={text => setSearch(text)}
+        value={search}
+        placeholder="Search"
         />
         {sortedShips.map((item) => {
           const manufacturerKey = item.manufacturer.toLowerCase().split(' ').join('_');
@@ -157,7 +177,6 @@ function ViewShipScreen({ navigation, route }) {
     const fetchShip = async () => {
       try{
         const result  = await getShip(route.params.ship);
-        console.log(result);
         //const loadouts = Array.from(result)
         setShip(result);
       } catch (error) {
@@ -166,9 +185,6 @@ function ViewShipScreen({ navigation, route }) {
     }
     fetchShip(route.params.ship);
   }, [route.params]);
-
-  console.log("Ship console log")
-  console.log(ship)
 
 
   if (!ship) {
@@ -205,7 +221,6 @@ function ItemsScreen({ navigation }) {
     const fetchItems = async () => {
       try{
         const result  = await getItems();
-        console.log(result);
         const items = Array.from(result)
         setItems(items);
       } catch (error) {
@@ -222,15 +237,15 @@ function ItemsScreen({ navigation }) {
     <View style={styles.container}>
       <ScrollView>
         {items.map((item) => {
-          // const manufacturerKey = item.manufacturer.toLowerCase().split(' ').join('_');
-          // const nameKey = item.name.toLowerCase().split(' ').join('_');
+          const manufacturerKey = item.manufacturer.toLowerCase().split(' ').join('_');
+          const nameKey = item.name.toLowerCase().split(' ').join('_');
           try {
             return (
               <View style={styles.shipListContainer} key={item.name}>
-                {/* <Image
-                  source={Icons[manufacturerKey]?.[nameKey]}
-                  style={styles.icon}
-                /> */}
+                <Image
+                    source={Icons[manufacturerKey]?.[nameKey]}
+                    style={styles.icon}
+                />
                 <View style={styles.textContainer}>
                   <Text style={styles.shipName}>{item.name}</Text>
                   <Text style={styles.shipManufacturer}>{item.manufacturer}</Text>
@@ -239,7 +254,6 @@ function ItemsScreen({ navigation }) {
             );
           } catch (e) {
             console.log(e);
-            //console.warn(`Could not find image for item ${item.name}`);
             return null;
           }
         })}
@@ -460,7 +474,6 @@ function ViewLoadoutsScreen({ navigation }) {
     const fetchLoadouts = async () => {
       try{
         const result  = await getLoadouts();
-        console.log(result);
         const loadouts = Array.from(result)
         setLoadouts(loadouts);
       } catch (error) {
@@ -510,8 +523,6 @@ function ViewLoadoutScreen({ navigation, route }) {
     const fetchLoadout = async () => {
       try{
         const result  = await getLoadout(route.params.loadout);
-        console.log(result);
-        //const loadouts = Array.from(result)
         setLoadout(result);
       } catch (error) {
         console.error(error)
@@ -519,9 +530,6 @@ function ViewLoadoutScreen({ navigation, route }) {
     }
     fetchLoadout(route.params.loadout);
   }, [route.params]);
-
-  console.log("Loadout console log")
-  console.log(loadout)
 
 
   if (!loadout) {
@@ -531,7 +539,6 @@ function ViewLoadoutScreen({ navigation, route }) {
       </View>
     )
   } else {
-    console.log(loadout)
     const shipNameKey = loadout.shipName.toLowerCase().split(' ').join('_');
     const shipManufacturerKey = loadout.shipManufacturer.toLowerCase().split(' ').join('_');
     return (
@@ -541,7 +548,7 @@ function ViewLoadoutScreen({ navigation, route }) {
           style={styles.topImage}
         />
         <View style={styles.container}>
-          <Text style={styles.shipManufacturer}>{loadout.name}</Text>
+          <Text style={styles.text}>{loadout.name}</Text>
           <Text style={styles.shipName}>{loadout.shipName}</Text>
           <Text style={styles.shipManufacturer}>{loadout.shipManufacturer}</Text>
           <Text style={styles.text}>Weapons</Text>
@@ -549,9 +556,9 @@ function ViewLoadoutScreen({ navigation, route }) {
           try {
             return (
               <View key={item.name}> 
-                <Text style={styles.text}>Weapon slot: {item.slot + 1}</Text>
-                <Text style={styles.text}>{item.name}</Text>
-                <Text style={styles.text}>{item.size}</Text>
+                <Text style={styles.shipName}>Weapon slot: {item.slot + 1}</Text>
+                <Text style={styles.shipManufacturer}>Weapon: {item.name}</Text>
+                <Text style={styles.shipManufacturer}>Size: {item.size}</Text>
               </View>
             );
           } catch (e) {
@@ -580,19 +587,11 @@ function CreateLoadoutScreen({ navigation }) {
   const [selectedShip, setSelectedShip] = useState(null);
   const [selectedWeapons, setSelectedWeapons] = useState([]);
 
-  const [selectedMissileRack, setSelectedMissileRack] = useState([]);
-  const [selectedMissiles, setSelectedMissiles] = useState([]);
-  const [selectedPowerPlants, setSelectedPowerPlants] = useState(null);
-  const [selectedCoolers, setSelectedCoolers] = useState(null);
-  const [selectedShieldGenerators, setSelectedShieldGenerators] = useState(null);
-  
-
 
   useEffect(() => {
     const fetchShips = async () => {
       try{
         const result  = await getShips();
-        console.log(result);
         const ships = Array.from(result)
         setShips(ships);
       } catch (error) {
@@ -606,7 +605,6 @@ function CreateLoadoutScreen({ navigation }) {
     const fetchWeapons = async () => {
       try{
         const result  = await getWeapons();
-        console.log(result);
         const weapons = Array.from(result)
         setWeapons(weapons);
       } catch (error) {
@@ -620,7 +618,6 @@ function CreateLoadoutScreen({ navigation }) {
     const fetchLoadouts = async () => {
       try{
         const result  = await getLoadouts();
-        console.log(result);
         const loadouts = Array.from(result)
         setLoadouts(loadouts);
       } catch (error) {
@@ -631,7 +628,6 @@ function CreateLoadoutScreen({ navigation }) {
   }, []);
 
   const onSave = async () => {
-    console.log(selectedName);
 
     if (selectedName.length < 1) {
       setNameError("Please Be the right length!!");
@@ -882,7 +878,8 @@ const styles = StyleSheet.create({
     flex: 0.3,
     marginRight: 15,
     marginLeft: 15,
-    marginBottom: 16
+    marginBottom: 16,
+    resizeMethod: "resize",
   },
   textContainer: {
     marginLeft: 10
