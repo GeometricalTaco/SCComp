@@ -5,6 +5,8 @@ import { Button, Text, TextInput, View, Image, Pressable, ScrollView, FlatList, 
 import SelectDropdown from "react-native-select-dropdown";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import { fetchShipData } from "./api_fetch";
 import { getShips, getShip } from './ships_database'
 import { getWeapons } from "./weapons_database";
 import { saveLoadout, getLoadouts, getLoadout } from "./loadout_database";
@@ -177,7 +179,6 @@ function ViewShipScreen({ navigation, route }) {
     const fetchShip = async () => {
       try{
         const result  = await getShip(route.params.ship);
-        //const loadouts = Array.from(result)
         setShip(result);
       } catch (error) {
         console.error(error)
@@ -441,12 +442,48 @@ function PopularRoutesScreen({ navigation }) {
 }
 
 function TradingCalculatorScreen({ navigation }) {
-  return (
-    <View style={styles.container}>
-      <Text>Trading Calculator Screen</Text>
-    </View>
-  );
-}
+  const [ships, setShips] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchShipData();
+        const data = response.data;
+        setShips(data);
+      } catch (error) {
+        console.error("Error fetching ship data:", error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
+  // console.log(ships)
+  // console.log(ships.length)
+
+  if(!ships.length) {
+    return(
+      <View>
+        <Text>some text or somthing to say it isn't loaded</Text>
+      </View>
+    )
+  } else {
+    return (
+      <View>
+        <Text>Star Citizen Ships:</Text>
+          {ships.map((ship) => {
+            console.log(ship)
+            return(
+              <View key={ship.code}>
+                <Text>{ship.name}</Text>
+                <Text>cock</Text>
+              </View>
+            )
+          })}
+      </View>
+    );
+  };
+};
 
 // Screen to direct users to View Loadout screen or Create Loadout screen.
 // Contains pressables to navigate to relevant screen.
