@@ -2,6 +2,7 @@ import "react-native-gesture-handler";
 import Realm from 'realm';
 import React, {useState, useEffect} from "react";
 import { Button, Text, TextInput, View, Image, Pressable, ScrollView, FlatList, SectionList, StyleSheet, SafeAreaView, TouchableOpacity } from "react-native";
+import * as Progress from 'react-native-progress';
 import SelectDropdown from "react-native-select-dropdown";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -457,6 +458,7 @@ function TradingCalculatorScreen({ navigation }) {
   
     fetchData();
   }, []);
+
   
   // console.log(ships)
   // console.log(ships.length)
@@ -465,21 +467,27 @@ function TradingCalculatorScreen({ navigation }) {
     return(
       <View>
         <Text>some text or somthing to say it isn't loaded</Text>
+        <Progress.Bar progress={0.3} width={200} />
       </View>
     )
   } else {
     return (
       <View>
-        <Text>Star Citizen Ships:</Text>
-          {ships.map((ship) => {
-            console.log(ship)
-            return(
-              <View key={ship.code}>
-                <Text>{ship.name}</Text>
-                <Text>cock</Text>
-              </View>
-            )
-          })}
+        <ScrollView>
+          <Text>Star Citizen Ships:</Text>
+            {ships.map((ship) => {
+              console.log(ship.photos)
+              return(
+                <View key={ship.code}>
+                  <Text>{ship.name}</Text>
+                  <Image
+                    source={ship.photos}
+                    style={styles.icon}
+                  />
+                </View>
+              )
+            })}
+        </ScrollView>
       </View>
     );
   };
