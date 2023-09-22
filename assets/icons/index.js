@@ -38,6 +38,9 @@ import arclight_pistol from './klaus_and_werner/arclight_pistol.png'
 import macflex_backpack from './roberts_space_industries/macflex_backpack.png'
 
 
+import placeholder from 'image_coming_soon.png'
+
+
 export default {
     // SHIPS
     aegis_dynamics: {
@@ -92,5 +95,9 @@ export default {
     roberts_space_industries: {
         macflex_backpack,
         constellation_aquila,
+    },
+
+    placeholder: {
+        placeholder
     },
 }

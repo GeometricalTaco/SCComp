@@ -152,6 +152,7 @@ function ShipsScreen({ navigation }) {
                   <Image
                     source={Icons[manufacturerKey]?.[nameKey]}
                     style={styles.icon}
+                    onError={(source={Icons:placeholder.placeholder})}
                   />
                   <View style={styles.textContainer}>
                     <Text style={styles.shipName}>{item.name}</Text>
@@ -465,14 +466,14 @@ function TradingCalculatorScreen({ navigation }) {
 
   if(!ships.length) {
     return(
-      <View>
-        <Text>some text or somthing to say it isn't loaded</Text>
+      <View style={styles.container}>
+        <Text>some text or something to say it isn't loaded</Text>
         <Progress.Bar progress={0.3} width={200} />
       </View>
     )
   } else {
     return (
-      <View>
+      <View style={styles.container}>
         <ScrollView>
           <Text>Star Citizen Ships:</Text>
             {ships.map((ship) => {
