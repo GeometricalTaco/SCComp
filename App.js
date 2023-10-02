@@ -476,14 +476,19 @@ function TradingCalculatorScreen({ navigation }) {
       <View style={styles.container}>
         <ScrollView>
           <Text>Star Citizen Ships:</Text>
-            {ships.map((ship) => {
+          {ships.map((ship) => {
+              const shipNameKey = ship.name.toLowerCase().split(' ').join('_');
+            const shipManufacturerKey = ship.manufacturer.toLowerCase().split(' ').join('_');
+            const errorKey1 = "placeholders"
+            const errorKey2 = "placeholder_image"
               console.log(ship.photos)
               return(
                 <View key={ship.code}>
                   <Text>{ship.name}</Text>
                   <Image
-                    source={ship.photos}
+                    source={Icons[shipManufacturerKey]?.[shipNameKey]}
                     style={styles.icon}
+                    defaultSource={Icons[errorKey1]?.[errorKey2]}
                   />
                 </View>
               )

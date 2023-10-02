@@ -38,7 +38,7 @@ import arclight_pistol from './klaus_and_werner/arclight_pistol.png'
 import macflex_backpack from './roberts_space_industries/macflex_backpack.png'
 
 
-import placeholder from 'image_coming_soon.png'
+import placeholder_image from './placeholders/image_coming_soon.png'
 
 
 export default {
@@ -97,7 +97,8 @@ export default {
         constellation_aquila,
     },
 
-    placeholder: {
-        placeholder
+    placeholders: {
+        placeholder_image
     },
+
 }
