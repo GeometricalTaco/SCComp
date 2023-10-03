@@ -14,6 +14,9 @@ import { saveLoadout, getLoadouts, getLoadout } from "./loadout_database";
 import { getItems } from "./items_database";
 import Icons from './assets/icons';
 
+import defaultImg from './assets/default'
+
+
 
 const Stack = createNativeStackNavigator();
 
@@ -446,6 +449,7 @@ function PopularRoutesScreen({ navigation }) {
 function TradingCalculatorScreen({ navigation }) {
   const [ships, setShips] = useState([]);
 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -477,10 +481,8 @@ function TradingCalculatorScreen({ navigation }) {
         <ScrollView>
           <Text>Star Citizen Ships:</Text>
           {ships.map((ship) => {
-              const shipNameKey = ship.name.toLowerCase().split(' ').join('_');
+            const shipNameKey = ship.name.toLowerCase().split(' ').join('_');
             const shipManufacturerKey = ship.manufacturer.toLowerCase().split(' ').join('_');
-            const errorKey1 = "placeholders"
-            const errorKey2 = "placeholder_image"
               console.log(ship.photos)
               return(
                 <View key={ship.code}>
@@ -488,7 +490,7 @@ function TradingCalculatorScreen({ navigation }) {
                   <Image
                     source={Icons[shipManufacturerKey]?.[shipNameKey]}
                     style={styles.icon}
-                    defaultSource={Icons[errorKey1]?.[errorKey2]}
+                    defaultSource={defaultImg}
                   />
                 </View>
               )
