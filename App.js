@@ -1,7 +1,7 @@
 import "react-native-gesture-handler";
 import Realm from 'realm';
 import React, {useState, useEffect} from "react";
-import { Button, Text, TextInput, View, Image, Pressable, ScrollView, FlatList, SectionList, StyleSheet, SafeAreaView, TouchableOpacity } from "react-native";
+import { Button, Text, TextInput, View, Image, Pressable, ScrollView, FlatList, SectionList, StyleSheet, SafeAreaView, TouchableOpacity, Dimensions } from "react-native";
 import * as Progress from 'react-native-progress';
 import SelectDropdown from "react-native-select-dropdown";
 import { NavigationContainer } from "@react-navigation/native";
@@ -14,7 +14,7 @@ import { saveLoadout, getLoadouts, getLoadout } from "./loadout_database";
 import { getItems } from "./items_database";
 import Icons from './assets/icons';
 
-import defaultImg from './assets/default'
+//import defaultImg from './assets/default'
 
 
 
@@ -155,7 +155,6 @@ function ShipsScreen({ navigation }) {
                   <Image
                     source={Icons[manufacturerKey]?.[nameKey]}
                     style={styles.icon}
-                    onError={(source={Icons:placeholder.placeholder})}
                   />
                   <View style={styles.textContainer}>
                     <Text style={styles.shipName}>{item.name}</Text>
@@ -490,7 +489,7 @@ function TradingCalculatorScreen({ navigation }) {
                   <Image
                     source={Icons[shipManufacturerKey]?.[shipNameKey]}
                     style={styles.icon}
-                    defaultSource={defaultImg}
+                    //defaultSource={defaultImg}
                   />
                 </View>
               )
@@ -855,6 +854,9 @@ export default App;
 
 
 // Declaration of all stylesheet styles used throughout the app by components
+const dimensions = Dimensions.get("window");
+const imageHeight = Math.round(dimensions.width * 9 / 16);
+const imageWidth = dimensions.width;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -928,11 +930,14 @@ const styles = StyleSheet.create({
     marginRight: 16
   },
   topImage: {
-    flex: 0.3,
+    //flex: 0.3,
+    
     marginRight: 15,
     marginLeft: 15,
     marginBottom: 16,
-    resizeMethod: "resize",
+    height: imageHeight,
+    width: imageWidth,
+    //resizeMethod: "resize",
   },
   textContainer: {
     marginLeft: 10
