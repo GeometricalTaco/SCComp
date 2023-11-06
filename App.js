@@ -54,6 +54,70 @@ function sortData(data, sortBy, search, reversed = false) {
   );
 };
 
+function compareShips() {
+  const [localShips, setLocalShips] = useState([]);
+  const [onlineShips, setOnlineShips] = useState([]);
+
+  useEffect(() => {
+    const fetchLocalShips = async () => {
+      try {
+        const result = await getShips();
+        const ships = Array.from(result);
+        const localShips = ships
+        setLocalShips(ships);
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchLocalShips();
+  }, []);
+
+
+  useEffect(() => {
+    const fetchOnlineShips = async () => {
+      try {
+        const response = await fetchShipData();
+        const data = response.data;
+        const ships = Array.from(data)
+        const onlineShips = ships
+        setOnlineShips(ships);
+      } catch (error) {
+        console.error("Error fetching ship data:", error);
+      }
+    };
+
+    fetchOnlineShips();
+  }, []);
+//// StackOverflow Example!!! Need to adapt to work
+  const a = [{ value: "0", display: "Jamsheer" },
+    { value: "1", display: "Muhammed" },
+    { value: "2", display: "Ravi" },
+    { value: "3", display: "Ajmal" },
+    { value: "4", display: "Ryan" }];
+  
+  const b = [{ value: "0", display: "Jamsheer", $$hashKey: "008" },
+    { value: "1", display: "Muhammed", $$hashKey: "009" },
+    { value: "2", display: "Ravi", $$hashKey: "00A" },
+    { value: "3", display: "Ajmal", $$hashKey: "00B" }];
+
+// A comparer used to determine if two entries are equal.
+  const isSameUser = (localShips, onlineShips) => localShips.name === onlineShips.name;
+
+// Get items that only occur in the left array,
+// using the compareFunction to determine equality.
+  const onlyInLeft = (left, right, compareFunction) => 
+    left.filter(leftValue =>
+      !right.some(rightValue => 
+        compareFunction(leftValue, rightValue)));
+
+  const onlyInA = onlyInLeft(onlineShips, localShips, isSameUser);
+  const onlyInB = onlyInLeft(localShips, onlineShips, isSameUser);
+
+  const result = [...onlyInA, ...onlyInB];
+
+  console.log(result);
+}
+
 
 // Home Screen function containing buttons to the main function menus
 function HomeScreen({ navigation }) {
@@ -268,6 +332,7 @@ function ItemsScreen({ navigation }) {
 }
 
 function StarMapScreen({ navigation }) {
+  compareShips()
   return (
     <View style={styles.container}>
       <Text>Star Map screen</Text>
